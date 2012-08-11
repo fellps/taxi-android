@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="hello">Hello World, ClientMapActivity!</string>
-    <string name="app_name">taxi-android</string>
-
+    
+    <string name="app_name">Taxi Android</string>
+    
+    <!-- Configuração do Web Service -->
+    
+    <string name="url_authentication">http://ecotrans.urucumbrasil.com.br/drupal/user</string>
+	<string name="form_id">user_login</string>
+	
+	<!-- Menu -->
+	
+	<string name="menu_mapa">Mapa</string>
 </resources>
