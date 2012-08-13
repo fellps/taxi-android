@@ -6,9 +6,41 @@
     <!-- Configuração do Web Service -->
     
     <string name="url_authentication">http://ecotrans.urucumbrasil.com.br/drupal/user</string>
+    <string name="url_create_user">http://ecotrans.urucumbrasil.com.br/drupal/ecotaxi/createuser</string>
 	<string name="form_id">user_login</string>
+	<string name="form_id_login">user_login</string>
+	<string name="form_id_new">ecotaxi_user_new_form</string>
+	<string name="login_name">earthlost</string>
+    <string name="login_pass">fvs24862*</string>
 	
-	<!-- Menu -->
+	<!-- TabHost -->
 	
 	<string name="menu_mapa">Mapa</string>
+	
+	<!-- Register -->
+	
+	<string name="register_name">Nome</string>
+	<string name="register_email">E-mail</string>
+	<string name="register_cpf">CPF (11122233344)</string>
+	<string name="register_fone">Telefone</string>
+	<string name="register_pw">Senha</string>
+	<string name="register_button">Registrar</string>
+	<string name="register_lang">Idioma</string>
+	<string name="spinner_lang">Escolher idioma</string>
+    <string-array name="spinner_array">
+        <item>Português</item>
+        <item>Inglês</item>
+        <item>Espanhol</item>
+    </string-array>
+    <string name="register_error_name">Preencha o campo NOME corretamente!</string>
+    <string name="register_error_email">Preencha o campo E-MAIL corretamente!</string>
+    <string name="register_error_cpf">Preencha o campo CPF corretamente!</string>
+    <string name="register_error_fone">Preencha o campo TELEFONE corretamente!</string>
+    <string name="register_error_pw">Preencha o campo SENHA corretamente!</string>
+    <string name="register_error_off">O sistema está fora do ar!</string>
+    
+    <!-- ProgressDialog -->
+    
+    <string name="pd_title">Transmitindo dados</string>
+    <string name="pd_content">Aguarde, estamos realizando o seu cadastro&#8230;</string>
 </resources>

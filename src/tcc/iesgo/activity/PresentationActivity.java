@@ -34,6 +34,7 @@ public class PresentationActivity extends Activity {
 		setContentView(R.layout.presentation); //Layout da activity
 		
 		Thread timer = new Thread(){
+			@Override
 			public void run(){
 				try{
 
@@ -73,6 +74,9 @@ public class PresentationActivity extends Activity {
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
 				                Intent i = new Intent(getApplicationContext(), MainTabActivity.class);
 				                startActivity(i);
+				            } else {
+					    	    Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+					            startActivity(i);
 				            }
 				            	
 				       } catch(IOException e) {
@@ -98,7 +102,8 @@ public class PresentationActivity extends Activity {
 	}
 	
 	//Chamado quando a activity não é visível para o usuário
-    protected void onStop() {
+    @Override
+	protected void onStop() {
         super.onStop();
         mySQLiteAdapter.close();
         finish();

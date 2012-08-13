@@ -4,11 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -36,97 +34,111 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class RegisterActivity extends Activity {
-/*
-	Button btnLogin;
-	ImageButton btnHelp;
-	EditText inputUsuario;
+	
+	Spinner language;
+	EditText inputName;
 	EditText inputEmail;
-	EditText inputCod;
-	TextView textUsuario;
-	TextView textEmail;
-	TextView textCod;
-	TextView textLang;
-	Integer listNum = 0;
+	EditText inputCpf;
+	EditText inputFone;
+	EditText inputPassword;
 	TextView registerErrorMsg;
+	Button btnRegister;
+	ImageButton btnHelp;
+	
+	TextView textName;
+	TextView textEmail;
+	TextView textCpf;
+	TextView textFone;
+	TextView textPassword;
+	
 	SQLiteAdapter mySQLiteAdapter;
 	HttpClient httpclient = new DefaultHttpClient();
+	
 	ProgressDialog progressDialog;
-	Spinner idiomas;
+	
 	ArrayAdapter<CharSequence> adapter;
 	ArrayAdapter<CharSequence> adapter2;
-
+	
+	Integer listNum = 0;
 	String lang = "pt";
 	String resultCod = "0";
 
+	//Verifica se o e-mail informado é válido
 	public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-			"[a-zA-Z0-9+._%-+]{1,256}" + "@"
+			  "[a-zA-Z0-9+._%-+]{1,256}" + "@"
 			+ "[a-zA-Z0-9][a-zA-Z0-9-]{0,64}" + "(" + "."
 			+ "[a-zA-Z0-9][a-zA-Z0-9-]{0,25}" + ")+");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.registrar);
-
-		idiomas = (Spinner) findViewById(R.id.idiomas);
-		inputUsuario = (EditText) findViewById(R.id.loginUsuario);
-		inputEmail = (EditText) findViewById(R.id.emailUsuario);
-		inputCod = (EditText) findViewById(R.id.codVerificador);
-		textUsuario = (TextView) findViewById(R.id.TextView2);
-		textEmail = (TextView) findViewById(R.id.TextView4);
-		textCod = (TextView) findViewById(R.id.TextView5);
-		textLang = (TextView) findViewById(R.id.TextView3);
 		
-		adapter = ArrayAdapter.createFromResource(
-				this, R.array.spinner_array,
-				android.R.layout.simple_spinner_item);
+		setContentView(R.layout.register); //Layout da Activity
+
+		//Instância dos componentes do layout
+		language = (Spinner) findViewById(R.id.sp_lang);
+		inputName = (EditText) findViewById(R.id.et_name);
+		inputEmail = (EditText) findViewById(R.id.et_email);
+		inputCpf = (EditText) findViewById(R.id.et_cpf);
+		inputFone = (EditText) findViewById(R.id.et_fone);
+		inputPassword = (EditText) findViewById(R.id.et_pw);
+		btnRegister = (Button) findViewById(R.id.bt_register);
+		btnHelp = (ImageButton) findViewById(R.id.ib_help);
+		registerErrorMsg = (TextView) findViewById(R.id.tv_error);
+		textName = (TextView) findViewById(R.id.tv_name);
+		textEmail = (TextView) findViewById(R.id.tv_email);
+		textCpf = (TextView) findViewById(R.id.tv_cpf);
+		textFone = (TextView) findViewById(R.id.tv_fone);
+		textPassword = (TextView) findViewById(R.id.tv_pw);
+		
+		//Inicializa o Spinner
+		adapter = ArrayAdapter.createFromResource(this, R.array.spinner_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		idiomas.setAdapter(adapter);
+		language.setAdapter(adapter);
+		
 		if (Locale.getDefault().toString().equals("pt_BR"))
-			idiomas.setSelection(0);
+			language.setSelection(0);
 		else if (Locale.getDefault().toString().equals("en_US"))
-			idiomas.setSelection(1);
+			language.setSelection(1);
 		else if (Locale.getDefault().toString().equals("es_ES"))
-			idiomas.setSelection(2);
-
-		btnLogin = (Button) findViewById(R.id.btnLogin);
-		btnHelp = (ImageButton) findViewById(R.id.help);
-		registerErrorMsg = (TextView) findViewById(R.id.login_error);
+			language.setSelection(2);
 		
-		
+		//Botão de ajuda
 		btnHelp.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View view) {
-				Intent i = new Intent(getApplicationContext(),
-						HelpActivity.class);
-					startActivity(i);
-
-				
+				Intent i = new Intent(getApplicationContext(), HelpActivity.class);
+				startActivity(i);
 			}
 		});
-
 	
-		btnLogin.setOnClickListener(new View.OnClickListener() {
+		//Botão de registro
+		btnRegister.setOnClickListener(new View.OnClickListener() {
+			String[] data = {inputName.getText().toString(), inputEmail.getText().toString(), inputCpf.getText().toString(),
+							 inputFone.getText().toString(), inputPassword.getText().toString()};
+			//Verifica se todos os campos foram preenchidos corretamente
+			@Override
 			public void onClick(View view) {
-
-				if (inputUsuario.getText().toString().equals(""))
-					Toast.makeText(getApplicationContext(), getString(R.string.registrar_error_campo_nome), Toast.LENGTH_SHORT).show();
-				else if (inputEmail.getText().toString().equals(""))
-					Toast.makeText(getApplicationContext(), getString(R.string.registrar_error_campo_email), Toast.LENGTH_SHORT).show();
+				if (inputName.getText().toString().length() <= 3)
+					Toast.makeText(getApplicationContext(), getString(R.string.register_error_name), Toast.LENGTH_SHORT).show();
 				else if(!checkEmail(inputEmail.getText().toString()))
-					Toast.makeText(getApplicationContext(), getString(R.string.registrar_error_campo_email_invalid), Toast.LENGTH_SHORT).show();
-				else if(inputCod.getText().toString().equals(""))
-					Toast.makeText(getApplicationContext(), getString(R.string.registrar_error_campo_cod_invalid), Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.register_error_email), Toast.LENGTH_SHORT).show();
+				else if(!validateCpf(inputCpf.getText().toString()))
+					Toast.makeText(getApplicationContext(), getString(R.string.register_error_cpf), Toast.LENGTH_SHORT).show();
+				else if(inputFone.getText().toString().length() < 8)
+					Toast.makeText(getApplicationContext(), getString(R.string.register_error_fone), Toast.LENGTH_SHORT).show();
+				else if(inputPassword.getText().toString().length() < 5)
+					Toast.makeText(getApplicationContext(), getString(R.string.register_error_pw), Toast.LENGTH_SHORT).show();
 				else
-					register(inputUsuario.getText().toString(), inputEmail.getText().toString(), lang, inputCod.getText().toString());
+					register(data);
 			}
 		});
 		
-		idiomas.setOnItemSelectedListener(new OnItemSelectedListener() {
+		language.setOnItemSelectedListener(new OnItemSelectedListener(){
 			  @Override
 			  public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+				  
 				  lang = parentView.getItemAtPosition(position).toString();
 				  Locale appLoc = null;
 			
@@ -147,19 +159,18 @@ public class RegisterActivity extends Activity {
 				    	appConfig.locale = appLoc;
 				    	getBaseContext().getResources().updateConfiguration(appConfig,
 						getBaseContext().getResources().getDisplayMetrics());
-				    	btnLogin.setText(R.string.registrar_button);
-				    	textUsuario.setText(R.string.registrar_usuario);
-					    textEmail.setText(R.string.registrar_email);
-					    textCod.setText(R.string.registrar_cod_ver);
-					    textLang.setText(R.string.registrar_lang);
-					
-						adapter2 = ArrayAdapter.createFromResource(
-								parentView.getContext(), R.array.spinner_array,
-								android.R.layout.simple_spinner_item);
+				    	
+				    	btnRegister.setText(R.string.register_button);
+				    	textName.setText(R.string.register_name);
+					    textEmail.setText(R.string.register_email);
+					    textCpf.setText(R.string.register_cpf);
+					    textFone.setText(R.string.register_fone);
+					    textPassword.setText(R.string.register_pw);
+					    
+						adapter2 = ArrayAdapter.createFromResource(parentView.getContext(), R.array.spinner_array,	android.R.layout.simple_spinner_item);
 						adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-						idiomas.setAdapter(adapter2);
-						idiomas.setSelection(position); // needed
-						
+						language.setAdapter(adapter2);
+						language.setSelection(position); //Obrigatório
 				    }
 				    listNum++;
 		      }
@@ -169,104 +180,69 @@ public class RegisterActivity extends Activity {
 		      {
 		        // TODO Auto-generated method stub
 		      }
-		});
-		
+		});	
 	}
 		
 	
-	public void register(final String myName, final String email,
-			final String lang, final String codVer) {
+	public void register(final String[] data) {
 		
-		progressDialog = ProgressDialog.show(RegisterActivity.this,
-				getString(R.string.registrar_pd_title),
-				getString(R.string.registrar_pd_content));
+		progressDialog = ProgressDialog.show(RegisterActivity.this, 
+				getString(R.string.pd_title), getString(R.string.pd_content));
+		
 		new Thread() {
+			@Override
 			public void run() {
 				try {
-
-				
-
 					// Autentica como admin
-					HttpPost httppost = new HttpPost(
-							getString(R.string.url_ecotrans_autenticacao));
-					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
-								2);
-					nameValuePairs.add(new BasicNameValuePair("name",
-								getString(R.string.login_name)));
-					nameValuePairs.add(new BasicNameValuePair("pass",
-							getString(R.string.login_pass)));
-					nameValuePairs.add(new BasicNameValuePair("form_id",
-								getString(R.string.register_form_id_login)));
+					HttpPost httppost = new HttpPost(getString(R.string.url_authentication));
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+					nameValuePairs.add(new BasicNameValuePair("name", getString(R.string.login_name)));
+					nameValuePairs.add(new BasicNameValuePair("pass", getString(R.string.login_pass)));
+					nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
 					try {
-							// Add your data
-							httppost.setEntity(new UrlEncodedFormEntity(
-										nameValuePairs));
-			
-							// Execute HTTP Post Request
-							// HttpResponse response = httpclient.execute(httppost);
+							//Executa a requisição
+							httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 							httpclient.execute(httppost);
+							//HttpResponse rp = httpclient.execute(post);
+						    //if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+							//resultCod = EntityUtils.toString(rp.getEntity());
+
 					} catch (IOException e) {
-						registerErrorMsg.setText(getString(R.string.registrar_error_sistema));					}
-					// Fim autentica como admin
-								
-					// Verifica o código		
-								
+							//Servidor fora do ar
+							registerErrorMsg.setText(getString(R.string.register_error_off));				
+					}
+					//Cria usuario	
+	
+					HttpPost post = new HttpPost(getString(R.string.url_create_user));
+					List<NameValuePair> userValuePairs = new ArrayList<NameValuePair>(2);
+					
+					userValuePairs.add(new BasicNameValuePair("name", data[0]));
+					userValuePairs.add(new BasicNameValuePair("pass", data[4]));
+					userValuePairs.add(new BasicNameValuePair("email", data[1]));
+					userValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_new)));
+	
 					try {
-						HttpPost post = new HttpPost(getString(R.string.url_ecotrans)
-								+ getString(R.string.url_cod_verificador)
-								+ codVer);
+						//Salva usuário na nuvem
+						post.setEntity(new UrlEncodedFormEntity(userValuePairs));
 						HttpResponse rp = httpclient.execute(post);
-						if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-								resultCod = EntityUtils.toString(rp.getEntity());
-						}catch (Exception e) {
-							registerErrorMsg
-								.setText(getString(R.string.registrar_error_sistema));
-						}
-								
-						if(resultCod.equals("1")){
-			
-							// Cria usuario					
-			
-							Random password = new Random();
-							String password_str = password.toString();
-				
-							HttpPost post = new HttpPost(
-									getString(R.string.url_ecotrans_criar_usuario));
-							List<NameValuePair> userValuePairs = new ArrayList<NameValuePair>(
-											2);
-							userValuePairs.add(new BasicNameValuePair("name", myName));
-							userValuePairs.add(new BasicNameValuePair("pass", password_str));
-							userValuePairs.add(new BasicNameValuePair("email",  email));
-							userValuePairs.add(new BasicNameValuePair("form_id",
-									getString(R.string.register_form_id_new)));
-			
-							try {
-								// Salva usuário na nuvem
-								post.setEntity(new UrlEncodedFormEntity(userValuePairs));
-								HttpResponse rp = httpclient.execute(post);
-								String user = EntityUtils.toString(rp.getEntity());
-								// txtUsuario.setText(user);
-								// Salva usuário no DB do Aplicativo
-								mySQLiteAdapter = new SQLiteAdapter(
-										getApplicationContext());
-								mySQLiteAdapter.openToWrite();
-								mySQLiteAdapter.insert(user, password_str, lang);
-			
-								mySQLiteAdapter.close();
-				
-								gotohome();
-										
-									
-							} catch (IOException e) {
-								registerErrorMsg
-								.setText(getString(R.string.registrar_error_sistema));							}
-					}else{
-						registerErrorMsg
-						.setText(getString(R.string.registrar_error_campo_cod_invalid));
+						String user = EntityUtils.toString(rp.getEntity());
+						//textName.setText(user);
+						//Salva usuário no DB do Aplicativo
+						
+						mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
+						mySQLiteAdapter.openToWrite();
+						mySQLiteAdapter.insert(user, data[4], lang);
+	
+						mySQLiteAdapter.close();
+		
+						gotoHome();
+	
+					} catch (IOException e) {
+						registerErrorMsg.setText(getString(R.string.register_error_off));							
 					}
 			
 				} catch (Exception e) {
-					e.printStackTrace();
+					registerErrorMsg.setText(getString(R.string.register_error_off));
 				}
 				progressDialog.dismiss();
 			}
@@ -274,11 +250,49 @@ public class RegisterActivity extends Activity {
 
 	}
 	
-	public void gotohome() {
-		Intent i = new Intent(getApplicationContext(),
-			MainTabActivity.class);
+	public void gotoHome() {
+		Intent i = new Intent(getApplicationContext(), MainTabActivity.class);
 		startActivity(i);
 	}
+	
+    public boolean validateCpf(String cpfNum) {
+    	try {
+	        int[] cpf = new int[cpfNum.length()]; //Define o valor com o tamanho da string  
+	        int resultP = 0;  
+	        int resultS = 0;  
+	        
+	        //Converte a string para um array de integer  
+	        for (int i = 0; i < cpf.length; i++) {  
+	            cpf[i] = Integer.parseInt(cpfNum.substring(i, i + 1));  
+	        }  
+	  
+	        //Calcula o primeiro número(DIV) do cpf  
+	        for (int i = 0; i < 9; i++) {  
+	            resultP += cpf[i] * (i + 1);  
+	        }  
+	        int divP = resultP % 11;
+	  
+	        //Se o resultado for diferente ao 10º digito do cpf retorna falso  
+	        if (divP != cpf[9]) { 
+	            return false;  
+	        } else {  
+	            //Calcula o segundo número(DIV) do cpf  
+	            for (int i = 0; i < 10; i++) {  
+	                resultS += cpf[i] * (i);  
+	            }  
+	            int divS = resultS % 11;  
+	  
+	            //Se o resultado for diferente ao 11º digito do cpf retorna falso  
+	            if (divS != cpf[10]) {  
+	                return false;  
+	            }  
+	        }
+    	} catch (Exception e) {
+			return false;
+		}
+        return true;  
+    }
+
 	
     private boolean checkEmail(String email) {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
@@ -300,6 +314,4 @@ public class RegisterActivity extends Activity {
 		super.onStop();
 		finish();
 	}
-
-*/
 }

@@ -20,6 +20,7 @@ public class MainTabActivity extends TabActivity {
 	
 	SQLiteAdapter mySQLiteAdapter;
 	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
