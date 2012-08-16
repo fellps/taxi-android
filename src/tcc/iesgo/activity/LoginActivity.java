@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class LoginActivity extends Activity {
 	EditText inputPassword;
 	TextView registerErrorMsg;
 	Button btnLogin;
+	ImageButton btnHelp;
 	
 	ProgressDialog progressDialog;
 	Handler mHandler = new Handler();
@@ -50,6 +52,7 @@ public class LoginActivity extends Activity {
 		inputPassword.setHint(getString(R.string.register_pw));
 		registerErrorMsg = (TextView) findViewById(R.id.tv_error);
 		btnLogin = (Button) findViewById(R.id.bt_login);
+		btnHelp = (ImageButton) findViewById(R.id.ib_help);
 		
 		btnLogin.setOnClickListener(new View.OnClickListener() {
 			//Verifica se todos os campos foram preenchidos corretamente
@@ -61,6 +64,15 @@ public class LoginActivity extends Activity {
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_pw), Toast.LENGTH_SHORT).show();
 				else
 					login(inputEmail.getText().toString(), inputPassword.getText().toString());
+			}
+		});
+		
+		//Botão de ajuda
+		btnHelp.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(getApplicationContext(), HelpActivity.class);
+				startActivity(i);
 			}
 		});
 	}

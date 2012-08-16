@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 		btnHelp.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+				Intent i = new Intent(getApplicationContext(), HelpActivity.class);
 				startActivity(i);
 			}
 		});

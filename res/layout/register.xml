@@ -23,7 +23,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="25dip"
+            android:layout_marginLeft="30dip"
             android:layout_marginTop="0dip"
             android:layout_below="@+id/logo"
             android:text="@string/register_lang"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/sp_lang"
-            android:layout_marginLeft="26dip"
+            android:layout_marginLeft="30dip"
             android:text="@string/register_name"
             android:textColor="#000" />
 
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_name"
-            android:layout_marginLeft="26dip"
+            android:layout_marginLeft="30dip"
             android:text="@string/register_email"
             android:textColor="#000" />
 
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_email"
-            android:layout_marginLeft="26dip"
+            android:layout_marginLeft="30dip"
             android:text="@string/register_cpf"
             android:textColor="#000" />
 
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_cpf"
-            android:layout_marginLeft="26dip"
+            android:layout_marginLeft="30dip"
             android:text="@string/register_phone"
             android:textColor="#000" />
 
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_phone"
-            android:layout_marginLeft="26dip"
+            android:layout_marginLeft="30dip"
             android:text="@string/register_pw"
             android:textColor="#000" />
 

@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.webkit.WebView;
 
 public class HelpActivity extends Activity {
-	WebView mWebView;/*
+	
+	WebView mWebView;
    @Override
    public void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
@@ -21,10 +22,7 @@ public class HelpActivity extends Activity {
    // Chamado quando a activity ja nao e visivel para o usuario
    protected void onStop() {
       super.onStop();	
-      Intent i = new Intent(getApplicationContext(),
-		RegistrarActivity.class);
+      Intent i = new Intent(getApplicationContext(), MainActivity.class);
       startActivity(i);
    }
-*/
-
 }
