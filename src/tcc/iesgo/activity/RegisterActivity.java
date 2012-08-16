@@ -40,16 +40,17 @@ public class RegisterActivity extends Activity {
 	EditText inputName;
 	EditText inputEmail;
 	EditText inputCpf;
-	EditText inputFone;
+	EditText inputPhone;
 	EditText inputPassword;
 	TextView registerErrorMsg;
 	Button btnRegister;
 	ImageButton btnHelp;
 	
+	TextView textLang;
 	TextView textName;
 	TextView textEmail;
 	TextView textCpf;
-	TextView textFone;
+	TextView textPhone;
 	TextView textPassword;
 	
 	SQLiteAdapter mySQLiteAdapter;
@@ -60,9 +61,8 @@ public class RegisterActivity extends Activity {
 	ArrayAdapter<CharSequence> adapter;
 	ArrayAdapter<CharSequence> adapter2;
 	
-	Integer listNum = 0;
-	String lang = "pt";
-	String resultCod = "0";
+	private Integer listNum = 0;
+	private String lang = "pt";
 
 	//Verifica se o e-mail informado é válido
 	public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
@@ -79,17 +79,22 @@ public class RegisterActivity extends Activity {
 		//Instância dos componentes do layout
 		language = (Spinner) findViewById(R.id.sp_lang);
 		inputName = (EditText) findViewById(R.id.et_name);
+		inputName.setHint(getString(R.string.register_name_description));
 		inputEmail = (EditText) findViewById(R.id.et_email);
+		inputEmail.setHint(getString(R.string.register_email_description));
 		inputCpf = (EditText) findViewById(R.id.et_cpf);
-		inputFone = (EditText) findViewById(R.id.et_fone);
+		inputCpf.setHint(getString(R.string.register_cpf_description));
+		inputPhone = (EditText) findViewById(R.id.et_phone);
+		inputPhone.setHint(getString(R.string.register_phone_description));
 		inputPassword = (EditText) findViewById(R.id.et_pw);
 		btnRegister = (Button) findViewById(R.id.bt_register);
 		btnHelp = (ImageButton) findViewById(R.id.ib_help);
 		registerErrorMsg = (TextView) findViewById(R.id.tv_error);
+		textLang = (TextView) findViewById(R.id.tv_lang);
 		textName = (TextView) findViewById(R.id.tv_name);
 		textEmail = (TextView) findViewById(R.id.tv_email);
 		textCpf = (TextView) findViewById(R.id.tv_cpf);
-		textFone = (TextView) findViewById(R.id.tv_fone);
+		textPhone = (TextView) findViewById(R.id.tv_phone);
 		textPassword = (TextView) findViewById(R.id.tv_pw);
 		
 		//Inicializa o Spinner
@@ -115,19 +120,20 @@ public class RegisterActivity extends Activity {
 	
 		//Botão de registro
 		btnRegister.setOnClickListener(new View.OnClickListener() {
-			String[] data = {inputName.getText().toString(), inputEmail.getText().toString(), inputCpf.getText().toString(),
-							 inputFone.getText().toString(), inputPassword.getText().toString()};
 			//Verifica se todos os campos foram preenchidos corretamente
 			@Override
 			public void onClick(View view) {
+				String[] data = {inputName.getText().toString(), inputEmail.getText().toString(), inputCpf.getText().toString(),
+						 inputPhone.getText().toString(), inputPassword.getText().toString()};
+				
 				if (inputName.getText().toString().length() <= 3)
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_name), Toast.LENGTH_SHORT).show();
 				else if(!checkEmail(inputEmail.getText().toString()))
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_email), Toast.LENGTH_SHORT).show();
 				else if(!validateCpf(inputCpf.getText().toString()))
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_cpf), Toast.LENGTH_SHORT).show();
-				else if(inputFone.getText().toString().length() < 8)
-					Toast.makeText(getApplicationContext(), getString(R.string.register_error_fone), Toast.LENGTH_SHORT).show();
+				else if(inputPhone.getText().toString().length() < 8)
+					Toast.makeText(getApplicationContext(), getString(R.string.register_error_phone), Toast.LENGTH_SHORT).show();
 				else if(inputPassword.getText().toString().length() < 5)
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_pw), Toast.LENGTH_SHORT).show();
 				else
@@ -135,6 +141,7 @@ public class RegisterActivity extends Activity {
 			}
 		});
 		
+		//Caso o idioma seja trocado
 		language.setOnItemSelectedListener(new OnItemSelectedListener(){
 			  @Override
 			  public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -142,9 +149,10 @@ public class RegisterActivity extends Activity {
 				  lang = parentView.getItemAtPosition(position).toString();
 				  Locale appLoc = null;
 			
+				  //Troca o idioma local do aplicativo pela selecionada
 				  if(lang.equals("Português") || lang.equals("Portuguese") || lang.equals("Portugués"))
 				    	appLoc = new Locale("pt_BR");
-				  else   if(lang.equals("English") || lang.equals("Inglês") || lang.equals("Inglés"))
+				  else   if(lang.equals("Inglês") || lang.equals("English") || lang.equals("Inglés"))
 				    	appLoc = new Locale("en_US");
 				  else if(lang.equals("Espanhol") || lang.equals("Spanish") || lang.equals("Español"))
 				    	appLoc = new Locale("es_ES");
@@ -153,26 +161,28 @@ public class RegisterActivity extends Activity {
 				  
 				  lang = appLoc.toString();
 				  
-				    if (!Locale.getDefault().toString().equals(appLoc.toString()) && listNum > 0) {
+				  //Se o idioma corrente for diferente do selecionado
+				  if (!Locale.getDefault().toString().equals(appLoc.toString()) && listNum > 0) {
 				    	Locale.setDefault(appLoc);
 				    	Configuration appConfig = new Configuration();
 				    	appConfig.locale = appLoc;
 				    	getBaseContext().getResources().updateConfiguration(appConfig,
 						getBaseContext().getResources().getDisplayMetrics());
-				    	
-				    	btnRegister.setText(R.string.register_button);
+				    	//Efetua as alterações dos textos, botões etc.
+				    	textLang.setText(R.string.register_lang);
 				    	textName.setText(R.string.register_name);
 					    textEmail.setText(R.string.register_email);
 					    textCpf.setText(R.string.register_cpf);
-					    textFone.setText(R.string.register_fone);
+					    textPhone.setText(R.string.register_phone);
 					    textPassword.setText(R.string.register_pw);
+					    btnRegister.setText(R.string.register_button);
 					    
 						adapter2 = ArrayAdapter.createFromResource(parentView.getContext(), R.array.spinner_array,	android.R.layout.simple_spinner_item);
 						adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 						language.setAdapter(adapter2);
 						language.setSelection(position); //Obrigatório
-				    }
-				    listNum++;
+				  }
+				  listNum++;
 		      }
 		   
 			  @Override
@@ -209,7 +219,7 @@ public class RegisterActivity extends Activity {
 
 					} catch (IOException e) {
 							//Servidor fora do ar
-							registerErrorMsg.setText(getString(R.string.register_error_off));				
+							registerErrorMsg.setText(getString(R.string.register_error_off));		
 					}
 					//Cria usuario	
 	
@@ -226,16 +236,15 @@ public class RegisterActivity extends Activity {
 						post.setEntity(new UrlEncodedFormEntity(userValuePairs));
 						HttpResponse rp = httpclient.execute(post);
 						String user = EntityUtils.toString(rp.getEntity());
-						//textName.setText(user);
-						//Salva usuário no DB do Aplicativo
 						
+						//Salva usuário no DB do Aplicativo
 						mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
 						mySQLiteAdapter.openToWrite();
 						mySQLiteAdapter.insert(user, data[4], lang);
 	
 						mySQLiteAdapter.close();
 		
-						gotoHome();
+						gotoMap(); //Abre o mapa
 	
 					} catch (IOException e) {
 						registerErrorMsg.setText(getString(R.string.register_error_off));							
@@ -247,11 +256,15 @@ public class RegisterActivity extends Activity {
 				progressDialog.dismiss();
 			}
 		}.start();
-
 	}
 	
-	public void gotoHome() {
-		Intent i = new Intent(getApplicationContext(), MainTabActivity.class);
+	private void gotoHome() {
+		Intent i = new Intent(getApplicationContext(), MainActivity.class);
+		startActivity(i);
+	}
+	
+	private void gotoMap() {
+		Intent i = new Intent(getApplicationContext(), ClientMapActivity.class);
 		startActivity(i);
 	}
 	
@@ -294,13 +307,13 @@ public class RegisterActivity extends Activity {
     }
 
 	
-    private boolean checkEmail(String email) {
+    public boolean checkEmail(String email) {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
     
 	@Override
 	public void onBackPressed() {
-		RegisterActivity.this.finish();
+		gotoHome();
 	}
 
 	@Override

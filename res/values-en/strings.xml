@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">Taxi Android</string>
+    
+    <!-- Configuração do Web Service -->
+    
+    <string name="url_authentication">http://amazon/drupal/user</string>
+    <string name="url_create_user">http://amazon/drupal/ecotaxi/createuser</string>
+	<string name="form_id">user_login</string>
+	<string name="form_id_login">user_login</string>
+	<string name="form_id_new">ecotaxi_user_new_form</string>
+	<string name="login_name">earthlost</string>
+    <string name="login_pass">fvs24862*</string>
+    
+    <!-- Main -->
+	
+	<string name="main_welcome">Welcome! Choose an option:</string>
+	<string name="main_button_login">Log in</string>
+	<string name="main_button_exit">Exit</string>
+	
+	<!-- TabHost -->
+	
+	<string name="menu_mapa">Map</string>
+	
+	<!-- Register -->
+	
+	<string name="register_name">Name</string>
+	<string name="register_email">E-mail</string>
+	<string name="register_cpf">CPF (11122233344)</string>
+	<string name="register_fone">Phone</string>
+	<string name="register_pw">Password</string>
+	<string name="register_button">Register</string>
+	<string name="register_lang">Language</string>
+	<string name="spinner_lang">Choose language</string>
+    <string-array name="spinner_array">
+        <item>Portuguese</item>
+        <item>English</item>
+        <item>Spanish</item>
+    </string-array>
+    <string name="register_error_name">Fill in the NAME correctly!</string>
+    <string name="register_error_email">Fill in the E-MAIL correctly!</string>
+    <string name="register_error_cpf">Fill in the CPF correctly!</string>
+    <string name="register_error_fone">Fill in the PHONE correctly!</string>
+    <string name="register_error_pw">Fill in the PASSWORD correctly!</string>
+    <string name="register_error_off">The system is down!</string>
+    
+    <!-- ProgressDialog -->
+    
+    <string name="pd_title">Transmitting data</string>
+    <string name="pd_content">Wait, we are making your registration&#8230;</string>
+</resources>

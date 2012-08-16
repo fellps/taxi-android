@@ -3,15 +3,35 @@
     
     <string name="app_name">Taxi Android</string>
     
+    <!-- AlertDialog -->
+    
+    <string name="ad_title_error">Ocorreu um erro!</string>
+    <string name="ad_content_error_off">O servidor não está disponível.</string>
+    <string name="ad_content_error_unexpected">Aconteceu um erro inesperado na aplicação.</string>
+    <string name="ad_button_negative">OK</string>
+    
     <!-- Configuração do Web Service -->
     
-    <string name="url_authentication">http://ecotrans.urucumbrasil.com.br/drupal/user</string>
-    <string name="url_create_user">http://ecotrans.urucumbrasil.com.br/drupal/ecotaxi/createuser</string>
+    <string name="url_authentication">http://amazon/drupal/user</string>
+    <string name="url_create_user">http://amazon/drupal/ecotaxi/createuser</string>
 	<string name="form_id">user_login</string>
 	<string name="form_id_login">user_login</string>
 	<string name="form_id_new">ecotaxi_user_new_form</string>
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>
+    
+    <!-- Login -->
+    
+    <string name="login_button_enter">Entrar</string>
+    <string name="login_email_description">example@gmail.com</string>
+    <string name="login_error_authentication">Os dados informados estão incorretos!</string>
+    <string name="login_error_connection">Ocorreu um erro na conexão</string>
+    
+    <!-- Main -->
+	
+	<string name="main_welcome">Seja bem vindo(a)! Escolha uma opção abaixo:</string>
+	<string name="main_button_login">Efetuar Login</string>
+	<string name="main_button_exit">Sair</string>
 	
 	<!-- TabHost -->
 	
@@ -20,9 +40,13 @@
 	<!-- Register -->
 	
 	<string name="register_name">Nome</string>
+	<string name="register_name_description">John Lennon</string>
 	<string name="register_email">E-mail</string>
-	<string name="register_cpf">CPF (11122233344)</string>
-	<string name="register_fone">Telefone</string>
+	<string name="register_email_description">john@gmail.com</string>
+	<string name="register_cpf">CPF (Sem pontos ou traços)</string>
+	<string name="register_cpf_description">00000000000</string>
+	<string name="register_phone">Telefone</string>
+	<string name="register_phone_description">1199999999</string>
 	<string name="register_pw">Senha</string>
 	<string name="register_button">Registrar</string>
 	<string name="register_lang">Idioma</string>
@@ -35,9 +59,13 @@
     <string name="register_error_name">Preencha o campo NOME corretamente!</string>
     <string name="register_error_email">Preencha o campo E-MAIL corretamente!</string>
     <string name="register_error_cpf">Preencha o campo CPF corretamente!</string>
-    <string name="register_error_fone">Preencha o campo TELEFONE corretamente!</string>
+    <string name="register_error_phone">Preencha o campo TELEFONE corretamente!</string>
     <string name="register_error_pw">Preencha o campo SENHA corretamente!</string>
     <string name="register_error_off">O sistema está fora do ar!</string>
+    
+    <!-- Presentation -->
+    
+    <string name="present_"></string>
     
     <!-- ProgressDialog -->
     

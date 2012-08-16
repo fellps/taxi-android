@@ -1,6 +1,8 @@
 package tcc.iesgo.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -20,7 +22,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import tcc.iesgo.activity.R;
 import tcc.iesgo.persistence.SQLiteAdapter;
-
 
 public class PresentationActivity extends Activity {
 
@@ -53,7 +54,7 @@ public class PresentationActivity extends Activity {
 				        cursor.moveToFirst(); //Move para o primeiro registro do cursor
 				        
 				        //Salva o nome e a senha do registro selecionado
-				        String username = cursor.getString(cursor.getColumnIndex(SQLiteAdapter.KEY_CONTENT));
+				        String username = cursor.getString(cursor.getColumnIndex(SQLiteAdapter.KEY_USERNAME));
 				        String password = cursor.getString(cursor.getColumnIndex(SQLiteAdapter.KEY_PASSWORD));
 				       
 				        mySQLiteAdapter.close(); //Fecha a conexão
@@ -74,21 +75,43 @@ public class PresentationActivity extends Activity {
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
 				                Intent i = new Intent(getApplicationContext(), MainTabActivity.class);
 				                startActivity(i);
-				            } else {
-					    	    Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+				            } else { //Se não, redireciona para a tela inicial
+					    	    Intent i = new Intent(getApplicationContext(), MainActivity.class);
 					            startActivity(i);
 				            }
 				            	
 				       } catch(IOException e) {
-				             e.printStackTrace(); //Fora do ar
+							final AlertDialog.Builder dialog = new AlertDialog.Builder(getParent());
+							dialog.setTitle(getString(R.string.ad_title_error));
+							dialog.setMessage(getString(R.string.ad_content_error_off));
+							dialog.setCancelable(false);
+							dialog.setNegativeButton(getString(R.string.ad_button_negative),
+									new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog,	int id) {
+											finish();
+										}
+									});
+							dialog.show();
 				       }
-			       } else { //Caso não exista nenhum registro, redireciona o usuário para página de login
-			    	   Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+			       } else { //Caso não exista nenhum registro, redireciona o usuário para página principal
+			    	   Intent i = new Intent(getApplicationContext(), MainActivity.class);
 			           startActivity(i);
 			       }
 			        
 				}catch (InterruptedException e){
-						e.printStackTrace();
+					final AlertDialog.Builder dialog = new AlertDialog.Builder(getParent());
+					dialog.setTitle(getString(R.string.ad_title_error));
+					dialog.setMessage(getString(R.string.ad_content_error_unexpected));
+					dialog.setCancelable(false);
+					dialog.setNegativeButton(getString(R.string.ad_button_negative),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,	int id) {
+									finish();
+								}
+							});
+					dialog.show();
 				}
 			}
 		};

@@ -23,7 +23,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="25dip"
             android:layout_marginTop="0dip"
             android:layout_below="@+id/logo"
             android:text="@string/register_lang"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_lang"
-            android:layout_marginLeft="28dip"
+            android:layout_marginLeft="23dip"
             android:prompt="@string/spinner_lang" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/sp_lang"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="26dip"
             android:text="@string/register_name"
             android:textColor="#000" />
 
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_name"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="25dip"
             android:inputType="text" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_name"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="26dip"
             android:text="@string/register_email"
             android:textColor="#000" />
 
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_email"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="25dip"
             android:inputType="text" />
 
         <TextView
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_email"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="26dip"
             android:text="@string/register_cpf"
             android:textColor="#000" />
 
@@ -92,26 +92,26 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_cpf"
-            android:layout_marginLeft="30dip"
+            android:layout_marginLeft="25dip"
             android:inputType="phone" />
         
         <TextView
-            android:id="@+id/tv_fone"
+            android:id="@+id/tv_phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/et_cpf"
-            android:layout_marginLeft="30dip"
-            android:text="@string/register_fone"
+            android:layout_marginLeft="26dip"
+            android:text="@string/register_phone"
             android:textColor="#000" />
 
         <EditText
-            android:id="@+id/et_fone"
+            android:id="@+id/et_phone"
             android:layout_width="270dip"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/tv_fone"
-            android:layout_marginLeft="30dip"
+            android:layout_below="@+id/tv_phone"
+            android:layout_marginLeft="25dip"
             android:inputType="phone" />
         
         <TextView
@@ -119,8 +119,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/et_fone"
-            android:layout_marginLeft="30dip"
+            android:layout_below="@+id/et_phone"
+            android:layout_marginLeft="26dip"
             android:text="@string/register_pw"
             android:textColor="#000" />
 
@@ -130,8 +130,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_pw"
-            android:layout_marginLeft="30dip"
-            android:inputType="phone" />
+            android:layout_marginLeft="25dip"
+            android:inputType="textPassword" />
 
         <TextView
             android:id="@+id/tv_error"
@@ -149,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/tv_error"
-            android:layout_marginLeft="35dip"
+            android:layout_marginLeft="30dip"
             android:background="#FFD700"
             android:padding="7dip"
             android:text="@string/register_button"
@@ -162,7 +162,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/bt_register"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="15dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/register_button"
             android:src="@drawable/register_info" />
