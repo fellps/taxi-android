@@ -12,8 +12,9 @@
     
     <!-- Configuração do Web Service -->
     
-    <string name="url_authentication">http://amazon/drupal/user</string>
-    <string name="url_create_user">http://amazon/drupal/ecotaxi/createuser</string>
+    <string name="url_webservice">http://ec2-177-71-166-216.sa-east-1.compute.amazonaws.com/txandroid/</string>
+    <string name="url_authentication">user/</string>
+    <string name="url_create_user">createuser/</string>
     <string name="url_help">http://www.google.com.br</string>
 	<string name="form_id">user_login</string>
 	<string name="form_id_login">user_login</string>
@@ -63,6 +64,8 @@
     <string name="register_error_phone">Preencha o campo TELEFONE corretamente!</string>
     <string name="register_error_pw">Preencha o campo SENHA corretamente!</string>
     <string name="register_error_off">O sistema está fora do ar!</string>
+    <string name="register_error_param">Não foi possível realizar o seu cadastro!</string>
+    <string name="register_error_duplicate">O e-mail informado já foi registrado!</string>
     
     <!-- Presentation -->
     

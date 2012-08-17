@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -14,6 +15,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import tcc.iesgo.activity.R;
 import tcc.iesgo.persistence.SQLiteAdapter;
@@ -23,6 +26,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -56,6 +61,7 @@ public class RegisterActivity extends Activity {
 	SQLiteAdapter mySQLiteAdapter;
 	HttpClient httpclient = new DefaultHttpClient();
 	
+	Handler mHandler = new Handler();
 	ProgressDialog progressDialog;
 	
 	ArrayAdapter<CharSequence> adapter;
@@ -63,6 +69,7 @@ public class RegisterActivity extends Activity {
 	
 	private Integer listNum = 0;
 	private String lang = "pt";
+	private JSONObject jObject;
 
 	//Verifica se o e-mail informado é válido
 	public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
@@ -124,7 +131,7 @@ public class RegisterActivity extends Activity {
 			@Override
 			public void onClick(View view) {
 				String[] data = {inputName.getText().toString(), inputEmail.getText().toString(), inputCpf.getText().toString(),
-						 inputPhone.getText().toString(), inputPassword.getText().toString()};
+						 inputPhone.getText().toString(), inputPassword.getText().toString(), lang};
 				
 				if (inputName.getText().toString().length() <= 3)
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_name), Toast.LENGTH_SHORT).show();
@@ -199,63 +206,74 @@ public class RegisterActivity extends Activity {
 		progressDialog = ProgressDialog.show(RegisterActivity.this, 
 				getString(R.string.pd_title), getString(R.string.pd_content));
 		
-		new Thread() {
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					// Autentica como admin
-					HttpPost httppost = new HttpPost(getString(R.string.url_authentication));
-					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-					nameValuePairs.add(new BasicNameValuePair("name", getString(R.string.login_name)));
-					nameValuePairs.add(new BasicNameValuePair("pass", getString(R.string.login_pass)));
-					nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
-					try {
-							//Executa a requisição
-							httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-							httpclient.execute(httppost);
-							//HttpResponse rp = httpclient.execute(post);
-						    //if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-							//resultCod = EntityUtils.toString(rp.getEntity());
-
-					} catch (IOException e) {
-							//Servidor fora do ar
-							registerErrorMsg.setText(getString(R.string.register_error_off));		
-					}
-					//Cria usuario	
-	
-					HttpPost post = new HttpPost(getString(R.string.url_create_user));
-					List<NameValuePair> userValuePairs = new ArrayList<NameValuePair>(2);
-					
-					userValuePairs.add(new BasicNameValuePair("name", data[0]));
-					userValuePairs.add(new BasicNameValuePair("pass", data[4]));
-					userValuePairs.add(new BasicNameValuePair("email", data[1]));
-					userValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_new)));
-	
-					try {
-						//Salva usuário na nuvem
-						post.setEntity(new UrlEncodedFormEntity(userValuePairs));
-						HttpResponse rp = httpclient.execute(post);
-						String user = EntityUtils.toString(rp.getEntity());
-						
-						//Salva usuário no DB do Aplicativo
-						mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
-						mySQLiteAdapter.openToWrite();
-						mySQLiteAdapter.insert(user, data[4], lang);
-	
-						mySQLiteAdapter.close();
+				mHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							// Autentica como admin
+							HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
+							List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+							nameValuePairs.add(new BasicNameValuePair("name", getString(R.string.login_name)));
+							nameValuePairs.add(new BasicNameValuePair("pass", getString(R.string.login_pass)));
+							nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
+							try {
+									//Executa a requisição
+									httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+									httpclient.execute(httppost);
+									HttpResponse rp = httpclient.execute(httppost);
+									String resultCod="";
+								    if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+									    resultCod = EntityUtils.toString(rp.getEntity());
+								    Log.i("#########", resultCod);
 		
-						gotoMap(); //Abre o mapa
-	
-					} catch (IOException e) {
-						registerErrorMsg.setText(getString(R.string.register_error_off));							
-					}
+							} catch (IOException e) {
+									//Servidor fora do ar
+									registerErrorMsg.setText(getString(R.string.register_error_off));		
+							}
 			
-				} catch (Exception e) {
-					registerErrorMsg.setText(getString(R.string.register_error_off));
-				}
-				progressDialog.dismiss();
+							HttpPost post = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_create_user)
+									+ data[0] + "/" + data[1] + "/" + data[2] + "/" + data[4] + "/" + data[5]);
+			
+							try {
+								//Salva usuário na nuvem
+								String response = "0";
+								HttpResponse rp = httpclient.execute(post);
+								
+								if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+									response = EntityUtils.toString(rp.getEntity());
+								Log.i("$$$$$", response);
+								String result = getJsonResult(response, "result");
+								Log.i("&&&&&&", result);
+								if(result.equals("1")){
+									//Salva usuário no DB do Aplicativo
+									mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
+									mySQLiteAdapter.openToWrite();
+									mySQLiteAdapter.insert(data[0], data[4], lang);
+				
+									mySQLiteAdapter.close();
+					
+									gotoMap(); //Abre o mapa
+								} else if(result.equals("0")){
+									registerErrorMsg.setText(getString(R.string.register_error_param));
+								} else {
+									registerErrorMsg.setText(getString(R.string.register_error_duplicate));
+								}
+			
+							} catch (IOException e) {
+								registerErrorMsg.setText(getString(R.string.register_error_off));							
+							}
+					
+						} catch (Exception e) {
+							registerErrorMsg.setText(getString(R.string.register_error_off));
+						}
+						progressDialog.dismiss();
+					}
+				});
 			}
-		}.start();
+		}).start();
 	}
 	
 	private void gotoHome() {
@@ -266,6 +284,11 @@ public class RegisterActivity extends Activity {
 	private void gotoMap() {
 		Intent i = new Intent(getApplicationContext(), ClientMapActivity.class);
 		startActivity(i);
+	}
+	
+	private String getJsonResult(String response, String option) throws JSONException{
+		jObject = new JSONObject(response);
+		return jObject.getString(option);
 	}
 	
     public boolean validateCpf(String cpfNum) {

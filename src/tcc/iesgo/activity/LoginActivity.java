@@ -1,12 +1,17 @@
 package tcc.iesgo.activity;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
@@ -14,6 +19,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -89,14 +95,21 @@ public class LoginActivity extends Activity {
 					@Override
 					public void run() {
 						try {
-							// Autentica o usuário na nuvem
-							HttpPost httppost = new HttpPost(getString(R.string.url_authentication)
-									+ email + "/" + password);
+							// Autentica como admin
+							HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
+							List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+							nameValuePairs.add(new BasicNameValuePair("name", email));
+							nameValuePairs.add(new BasicNameValuePair("pass", password));
+							nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
 		
-				            HttpResponse response = httpclient.execute(httppost); //Resposta do servidor
+							//Executa a requisição
+							httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+							httpclient.execute(httppost);
+							HttpResponse response = httpclient.execute(httppost);
 		
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
 				            	resultHttp = EntityUtils.toString(response.getEntity());
+				            	Log.i("###########", resultHttp);
 				            	if (resultHttp.equals("1")){
 				            		gotoMap();
 				            	} else {

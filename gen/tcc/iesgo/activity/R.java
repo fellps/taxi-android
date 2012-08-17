@@ -73,66 +73,70 @@ public final class R {
         public static final int ad_content_error_off=0x7f040002;
         public static final int ad_content_error_unexpected=0x7f040003;
         /**  AlertDialog 
+ AlertDialog 
          */
         public static final int ad_title_error=0x7f040001;
         public static final int app_name=0x7f040000;
-        public static final int form_id=0x7f040008;
-        public static final int form_id_login=0x7f040009;
-        public static final int form_id_new=0x7f04000a;
+        public static final int form_id=0x7f040009;
+        public static final int form_id_login=0x7f04000a;
+        public static final int form_id_new=0x7f04000b;
         /**  Login 
+ Login 
          */
-        public static final int login_button_enter=0x7f04000d;
-        public static final int login_email_description=0x7f04000e;
-        public static final int login_error_authentication=0x7f04000f;
-        public static final int login_error_connection=0x7f040010;
-        public static final int login_name=0x7f04000b;
-        public static final int login_pass=0x7f04000c;
-        public static final int main_button_exit=0x7f040013;
-        public static final int main_button_login=0x7f040012;
+        public static final int login_button_enter=0x7f04000e;
+        public static final int login_email_description=0x7f04000f;
+        public static final int login_error_authentication=0x7f040010;
+        public static final int login_error_connection=0x7f040011;
+        public static final int login_name=0x7f04000c;
+        public static final int login_pass=0x7f04000d;
+        public static final int main_button_exit=0x7f040014;
+        public static final int main_button_login=0x7f040013;
         /**  Main 
  Main 
          */
-        public static final int main_welcome=0x7f040011;
+        public static final int main_welcome=0x7f040012;
         /**  TabHost 
  TabHost 
          */
-        public static final int menu_mapa=0x7f040014;
-        public static final int pd_content=0x7f040029;
+        public static final int menu_mapa=0x7f040015;
+        public static final int pd_content=0x7f04002c;
         /**  ProgressDialog 
  ProgressDialog 
          */
-        public static final int pd_title=0x7f040028;
+        public static final int pd_title=0x7f04002b;
         /**  Presentation 
+ Presentation 
          */
-        public static final int present_=0x7f040027;
-        public static final int register_button=0x7f04001e;
-        public static final int register_cpf=0x7f040019;
-        public static final int register_cpf_description=0x7f04001a;
-        public static final int register_email=0x7f040017;
-        public static final int register_email_description=0x7f040018;
-        public static final int register_error_cpf=0x7f040023;
-        public static final int register_error_email=0x7f040022;
-        public static final int register_error_fone=0x7f04002b;
-        public static final int register_error_name=0x7f040021;
-        public static final int register_error_off=0x7f040026;
-        public static final int register_error_phone=0x7f040024;
-        public static final int register_error_pw=0x7f040025;
-        public static final int register_fone=0x7f04002a;
-        public static final int register_lang=0x7f04001f;
+        public static final int present_=0x7f04002a;
+        public static final int register_button=0x7f04001f;
+        public static final int register_cpf=0x7f04001a;
+        public static final int register_cpf_description=0x7f04001b;
+        public static final int register_email=0x7f040018;
+        public static final int register_email_description=0x7f040019;
+        public static final int register_error_cpf=0x7f040024;
+        public static final int register_error_duplicate=0x7f040029;
+        public static final int register_error_email=0x7f040023;
+        public static final int register_error_name=0x7f040022;
+        public static final int register_error_off=0x7f040027;
+        public static final int register_error_param=0x7f040028;
+        public static final int register_error_phone=0x7f040025;
+        public static final int register_error_pw=0x7f040026;
+        public static final int register_lang=0x7f040020;
         /**  Register 
  Register 
          */
-        public static final int register_name=0x7f040015;
-        public static final int register_name_description=0x7f040016;
-        public static final int register_phone=0x7f04001b;
-        public static final int register_phone_description=0x7f04001c;
-        public static final int register_pw=0x7f04001d;
-        public static final int spinner_lang=0x7f040020;
+        public static final int register_name=0x7f040016;
+        public static final int register_name_description=0x7f040017;
+        public static final int register_phone=0x7f04001c;
+        public static final int register_phone_description=0x7f04001d;
+        public static final int register_pw=0x7f04001e;
+        public static final int spinner_lang=0x7f040021;
+        public static final int url_authentication=0x7f040006;
+        public static final int url_create_user=0x7f040007;
+        public static final int url_help=0x7f040008;
         /**  Configuração do Web Service 
  Configuração do Web Service 
          */
-        public static final int url_authentication=0x7f040005;
-        public static final int url_create_user=0x7f040006;
-        public static final int url_help=0x7f040007;
+        public static final int url_webservice=0x7f040005;
     }
 }
