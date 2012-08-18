@@ -1,6 +1,5 @@
 package tcc.iesgo.activity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +26,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -209,80 +207,80 @@ public class RegisterActivity extends Activity {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							// Autentica como admin
-							HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
-							List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-							nameValuePairs.add(new BasicNameValuePair("name", getString(R.string.login_name)));
-							nameValuePairs.add(new BasicNameValuePair("pass", getString(R.string.login_pass)));
-							nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
-							try {
-									//Executa a requisição
-									httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-									httpclient.execute(httppost);
-									HttpResponse rp = httpclient.execute(httppost);
-									String resultCod="";
-								    if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-									    resultCod = EntityUtils.toString(rp.getEntity());
-								    Log.i("#########", resultCod);
-		
-							} catch (IOException e) {
-									//Servidor fora do ar
-									registerErrorMsg.setText(getString(R.string.register_error_off));		
-							}
-			
-							HttpPost post = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_create_user)
-									+ data[0] + "/" + data[1] + "/" + data[2] + "/" + data[4] + "/" + data[5]);
-			
-							try {
-								//Salva usuário na nuvem
-								String response = "0";
-								HttpResponse rp = httpclient.execute(post);
-								
-								if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
-									response = EntityUtils.toString(rp.getEntity());
-								Log.i("$$$$$", response);
-								String result = getJsonResult(response, "result");
-								Log.i("&&&&&&", result);
-								if(result.equals("1")){
-									//Salva usuário no DB do Aplicativo
-									mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
-									mySQLiteAdapter.openToWrite();
-									mySQLiteAdapter.insert(data[0], data[4], lang);
-				
-									mySQLiteAdapter.close();
+				try {
+					// Autentica como admin
+					HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
+					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+					nameValuePairs.add(new BasicNameValuePair("name", getString(R.string.login_name)));
+					nameValuePairs.add(new BasicNameValuePair("pass", getString(R.string.login_pass)));
+					nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
+					//Executa a requisição
+					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+					httpclient.execute(httppost);
 					
-									gotoMap(); //Abre o mapa
-								} else if(result.equals("0")){
-									registerErrorMsg.setText(getString(R.string.register_error_param));
-								} else {
+					HttpResponse rp = httpclient.execute(httppost);
+	
+					HttpPost post = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_create_user)
+							+ data[0] + "/" + data[1] + "/" + data[2] + "/" + data[4] + "/" + data[5]);
+
+						//Salva usuário na nuvem
+						rp = httpclient.execute(post);
+						
+						String response = "0";
+						
+						if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+							response = EntityUtils.toString(rp.getEntity());
+
+						String result = getJsonResult(response, "result"); //Json
+
+						if(result.equals("1")){
+							//Salva usuário no DB do Aplicativo
+							mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
+							mySQLiteAdapter.openToWrite();
+							mySQLiteAdapter.insert(data[0], data[4], lang);
+							mySQLiteAdapter.close();
+							
+							//Abre o mapa
+							gotoMap();
+						} else if(result.equals("2")){
+							mHandler.post(new Runnable() {
+								@Override
+								public void run() {
+									Toast.makeText(RegisterActivity.this, getString(R.string.register_error_duplicate), Toast.LENGTH_SHORT).show();
 									registerErrorMsg.setText(getString(R.string.register_error_duplicate));
 								}
-			
-							} catch (IOException e) {
-								registerErrorMsg.setText(getString(R.string.register_error_off));							
-							}
-					
-						} catch (Exception e) {
+							});
+						} else {
+							mHandler.post(new Runnable() {
+								@Override
+								public void run() {
+									Toast.makeText(RegisterActivity.this, getString(R.string.register_error_param), Toast.LENGTH_SHORT).show();
+									registerErrorMsg.setText(getString(R.string.register_error_param));
+								}
+							});
+						}
+
+				} catch (Exception e) {
+					mHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(getApplicationContext(), getString(R.string.register_error_off), Toast.LENGTH_SHORT).show();
 							registerErrorMsg.setText(getString(R.string.register_error_off));
 						}
-						progressDialog.dismiss();
-					}
-				});
+					});
+				}
+				progressDialog.dismiss();
 			}
 		}).start();
 	}
 	
 	private void gotoHome() {
-		Intent i = new Intent(getApplicationContext(), MainActivity.class);
+		Intent i = new Intent(RegisterActivity.this, MainActivity.class);
 		startActivity(i);
 	}
 	
 	private void gotoMap() {
-		Intent i = new Intent(getApplicationContext(), ClientMapActivity.class);
+		Intent i = new Intent(RegisterActivity.this, MainActivity.class);
 		startActivity(i);
 	}
 	

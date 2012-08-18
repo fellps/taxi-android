@@ -12,8 +12,9 @@
     
     <!-- Configuração do Web Service -->
     
-    <string name="url_webservice">http://ec2-177-71-166-216.sa-east-1.compute.amazonaws.com/txandroid/</string>
+    <string name="url_webservice">http://ec2-177-71-152-98.sa-east-1.compute.amazonaws.com/txandroid/</string>
     <string name="url_authentication">user/</string>
+    <string name="url_login_user">login/</string>
     <string name="url_create_user">createuser/</string>
     <string name="url_help">http://www.google.com.br</string>
 	<string name="form_id">user_login</string>

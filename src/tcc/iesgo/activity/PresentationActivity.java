@@ -59,7 +59,7 @@ public class PresentationActivity extends Activity {
 				       
 				        mySQLiteAdapter.close(); //Fecha a conexão
 				        
-				        HttpPost httppost = new HttpPost(getString(R.string.url_authentication));
+				        HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
 
 				        try {
 				            // Autentica o usuário na nuvem
@@ -73,10 +73,10 @@ public class PresentationActivity extends Activity {
 				            HttpResponse response = httpclient.execute(httppost); //Resposta do servidor
 
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
-				                Intent i = new Intent(getApplicationContext(), MainTabActivity.class);
+				                Intent i = new Intent(PresentationActivity.this, MainTabActivity.class);
 				                startActivity(i);
 				            } else { //Se não, redireciona para a tela inicial
-					    	    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+					    	    Intent i = new Intent(PresentationActivity.this, MainActivity.class);
 					            startActivity(i);
 				            }
 				            	

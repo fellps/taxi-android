@@ -1,6 +1,5 @@
 package tcc.iesgo.activity;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +12,14 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +43,8 @@ public class LoginActivity extends Activity {
 	HttpClient httpclient = new DefaultHttpClient();
 	
 	RegisterActivity register = new RegisterActivity();
+	
+	private JSONObject jObject;
 	
 	private String resultHttp = "0";
 	
@@ -91,55 +93,74 @@ public class LoginActivity extends Activity {
 			@Override
 			public void run() {
 
-				mHandler.post(new Runnable() {
-					@Override
-					public void run() {
 						try {
-							// Autentica como admin
-							HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
-							List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-							nameValuePairs.add(new BasicNameValuePair("name", email));
-							nameValuePairs.add(new BasicNameValuePair("pass", password));
-							nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
-		
-							//Executa a requisição
-							httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-							httpclient.execute(httppost);
-							HttpResponse response = httpclient.execute(httppost);
-		
-				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
-				            	resultHttp = EntityUtils.toString(response.getEntity());
-				            	Log.i("###########", resultHttp);
-				            	if (resultHttp.equals("1")){
-				            		gotoMap();
-				            	} else {
-				            		Toast.makeText(LoginActivity.this, getString(R.string.login_error_authentication), Toast.LENGTH_SHORT).show();
-						    	    registerErrorMsg.setText(getString(R.string.login_error_authentication));
-				            	}
-				            } else { //Se não, exibe erro
-				            	Toast.makeText(LoginActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
-					    	    registerErrorMsg.setText(getString(R.string.login_error_connection));
-				            }
-		
-						} catch (IOException e) {
-							Toast.makeText(LoginActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
-				    	    registerErrorMsg.setText(getString(R.string.login_error_connection));		
+							HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_login_user)
+									+ email + "/" + password + "/" + getString(R.string.form_id_login));
+							
+							HttpResponse rp = httpclient.execute(httppost);
+
+							if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+								resultHttp = EntityUtils.toString(rp.getEntity());
+
+							String result = getJsonResult(resultHttp, "result"); //Json
+							
+							if(result.equals("1")){
+								//Autentica o usuário no webservice
+								httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
+								List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+								nameValuePairs.add(new BasicNameValuePair("name", email));
+								nameValuePairs.add(new BasicNameValuePair("pass", password));
+								nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
+			
+								//Executa a requisição
+								httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+								rp = httpclient.execute(httppost);
+			
+					            if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
+					            	resultHttp = EntityUtils.toString(rp.getEntity());
+	
+					            	gotoMap();
+	
+					            } else { //Se não, exibe erro
+				    				mHandler.post(new Runnable() {
+				    					@Override
+				    					public void run() {
+						            		Toast.makeText(LoginActivity.this, getString(R.string.login_error_authentication), Toast.LENGTH_SHORT).show();
+								    	    registerErrorMsg.setText(getString(R.string.login_error_authentication));
+				    					}
+				    				});
+					            }
+							} else {
+			    				mHandler.post(new Runnable() {
+			    					@Override
+			    					public void run() {
+					            		Toast.makeText(LoginActivity.this, getString(R.string.login_error_authentication), Toast.LENGTH_SHORT).show();
+							    	    registerErrorMsg.setText(getString(R.string.login_error_authentication));
+			    					}
+			    				});
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 						progressDialog.dismiss();
-					}
-				});
 			}
 		}).start();
 	}
 	
 	private void gotoHome() {
-		Intent i = new Intent(getApplicationContext(), MainActivity.class);
+		Intent i = new Intent(LoginActivity.this, MainActivity.class);
 		startActivity(i);
 	}
 	
 	private void gotoMap() {
-		Intent i = new Intent(getApplicationContext(), ClientMapActivity.class);
+		Intent i = new Intent(LoginActivity.this, ClientMapActivity.class);
 		startActivity(i);
+	}
+	
+	private String getJsonResult(String response, String option) throws JSONException{
+		jObject = new JSONObject(response);
+		return jObject.getString(option);
 	}
 	
 	@Override
