@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="fill_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/map_info"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dip"
+        android:background="@drawable/background_map_top"
+        android:gravity="center_vertical"
+        android:padding="7dip"
+        android:paddingTop="8dip"
+        android:text="@string/map_search_point"
+        android:textColor="@android:color/white"
+        android:textSize="12dp" />
+
+    <com.google.android.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mapview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/map_info"
+        android:apiKey="0QJ0RfBvLaVmBWnlVgVvNcyzCNFaEqHVAr4i4OQ"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:state_enabled="true" >
+    </com.google.android.maps.MapView>
+	
+</RelativeLayout>

@@ -2,6 +2,7 @@ package tcc.iesgo.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -18,22 +19,26 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import tcc.iesgo.activity.RegisterActivity;
+import tcc.iesgo.persistence.SQLiteAdapter;
 
 public class LoginActivity extends Activity {
 	
 	EditText inputEmail;
 	EditText inputPassword;
 	TextView registerErrorMsg;
+	CheckBox cbRemember;
 	Button btnLogin;
 	ImageButton btnHelp;
 	
@@ -58,6 +63,7 @@ public class LoginActivity extends Activity {
 		inputEmail.setHint(getString(R.string.login_email_description));
 		inputPassword = (EditText) findViewById(R.id.et_pw);
 		inputPassword.setHint(getString(R.string.register_pw));
+		cbRemember = (CheckBox) findViewById(R.id.cb_remember);
 		registerErrorMsg = (TextView) findViewById(R.id.tv_error);
 		btnLogin = (Button) findViewById(R.id.bt_login);
 		btnHelp = (ImageButton) findViewById(R.id.ib_help);
@@ -87,18 +93,19 @@ public class LoginActivity extends Activity {
 	
 	private void login(final String email, final String password){
 		progressDialog = ProgressDialog.show(LoginActivity.this, 
-				getString(R.string.pd_title), getString(R.string.pd_content));
+				getString(R.string.pd_title), getString(R.string.pd_content_login));
 		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 
 						try {
+							
 							HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_login_user)
 									+ email + "/" + password + "/" + getString(R.string.form_id_login));
-							
-							HttpResponse rp = httpclient.execute(httppost);
 
+							HttpResponse rp = httpclient.execute(httppost);
+							
 							if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 								resultHttp = EntityUtils.toString(rp.getEntity());
 
@@ -118,10 +125,11 @@ public class LoginActivity extends Activity {
 								rp = httpclient.execute(httppost);
 			
 					            if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
-					            	resultHttp = EntityUtils.toString(rp.getEntity());
-	
+					            	resultHttp = EntityUtils.toString(rp.getEntity()); 
+					            	if(cbRemember.isChecked()){
+					            		saveCredentials(email, password);
+					            	}
 					            	gotoMap();
-	
 					            } else { //Se não, exibe erro
 				    				mHandler.post(new Runnable() {
 				    					@Override
@@ -141,11 +149,34 @@ public class LoginActivity extends Activity {
 			    				});
 							}
 						} catch (Exception e) {
-							e.printStackTrace();
+		    				mHandler.post(new Runnable() {
+		    					@Override
+		    					public void run() {
+				            		Toast.makeText(LoginActivity.this, getString(R.string.register_error_off), Toast.LENGTH_SHORT).show();
+						    	    registerErrorMsg.setText(getString(R.string.register_error_off));
+		    					}
+		    				});
 						}
 						progressDialog.dismiss();
 			}
 		}).start();
+	}
+	
+	private void saveCredentials(String email, String password){
+		SQLiteAdapter mySQLiteAdapter;
+		
+		mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
+		
+        mySQLiteAdapter.openToRead(); //Abre para leitura
+        
+        Cursor cursor = mySQLiteAdapter.queueAll(); //Dados salvos no banco
+        startManagingCursor(cursor);
+        
+        if(cursor.getCount() == 0){ //Caso seja encontrado algum registro
+			mySQLiteAdapter.openToWrite();
+			mySQLiteAdapter.insert(email, password, Locale.getDefault().toString()); //Salva os dados
+        }
+		mySQLiteAdapter.close();
 	}
 	
 	private void gotoHome() {
@@ -154,7 +185,7 @@ public class LoginActivity extends Activity {
 	}
 	
 	private void gotoMap() {
-		Intent i = new Intent(LoginActivity.this, ClientMapActivity.class);
+		Intent i = new Intent(LoginActivity.this, MainTabActivity.class);
 		startActivity(i);
 	}
 	

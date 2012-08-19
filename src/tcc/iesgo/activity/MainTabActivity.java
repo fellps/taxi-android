@@ -1,6 +1,5 @@
 package tcc.iesgo.activity;
 
-
 import java.util.Locale;
 
 import tcc.iesgo.activity.R;
@@ -24,6 +23,11 @@ public class MainTabActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		/**
+		 * IMPLEMENTAR ESTRUTURA PARA BUSCAR O IDIOMA DO USUÁRIO
+		 * QUE ESTÁ NO WEBSERVICE E SALVA-LO NO BD DO CELULAR
+		 */
+		
 		mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
         mySQLiteAdapter.openToRead(); //Abre para leitura
 
@@ -45,7 +49,7 @@ public class MainTabActivity extends TabActivity {
 	        appConfig.locale = appLoc;
 	        getBaseContext().getResources().updateConfiguration(appConfig,
 	        		getBaseContext().getResources().getDisplayMetrics()); //Efetua a alteração
-        }		
+        }
         mySQLiteAdapter.close(); //Fecha a conexão
         
     	setContentView(R.layout.tab_main); //Seta o layout da activity
@@ -56,35 +60,35 @@ public class MainTabActivity extends TabActivity {
 		
 		Intent intentAndroid = new Intent().setClass(this, ClientMapActivity.class);
 		spec = tabHost
-				.newTabSpec(getString(R.string.menu_mapa))
-				.setIndicator(getString(R.string.menu_mapa), res.getDrawable(R.layout.tab_icon_map))
+				.newTabSpec(getString(R.string.menu_map))
+				.setIndicator(getString(R.string.menu_map), res.getDrawable(R.layout.tab_icon_map))
 				.setContent(intentAndroid);
 		tabHost.addTab(spec);
-		/*
 
-		intentAndroid = new Intent().setClass(this, TabGroupReservaActivity.class);
+
+		intentAndroid = new Intent().setClass(this, RecordsActivity.class);
 		spec = tabHost
-			.newTabSpec(getString(R.string.menu_reservar))
-			.setIndicator(getString(R.string.menu_reservar), res.getDrawable(R.layout.tab_icon_lista))
+			.newTabSpec(getString(R.string.menu_records))
+			.setIndicator(getString(R.string.menu_records), res.getDrawable(R.layout.tab_icon_records))
 			.setContent(intentAndroid);
 		tabHost.addTab(spec);
 		
 		
-		intentAndroid = new Intent().setClass(this, TabGroupMinhasReservasActivity.class);
+		intentAndroid = new Intent().setClass(this, FavoritesActivity.class);
 		spec = tabHost
-			.newTabSpec(getString(R.string.menu_m_reservas))
-			.setIndicator(getString(R.string.menu_m_reservas), res.getDrawable(R.layout.tab_icon_m_reservas))
+			.newTabSpec(getString(R.string.menu_favorites))
+			.setIndicator(getString(R.string.menu_favorites), res.getDrawable(R.layout.tab_icon_favorites))
 			.setContent(intentAndroid);
 		tabHost.addTab(spec);
 		
 		
-		intentAndroid = new Intent().setClass(this, SobreActivity.class);
+		intentAndroid = new Intent().setClass(this, TaximeterActivity.class);
 		spec = tabHost
-			.newTabSpec(getString(R.string.menu_sobre))
-			.setIndicator(getString(R.string.menu_sobre), res.getDrawable(R.layout.tab_icon_sobre))
+			.newTabSpec(getString(R.string.menu_taximeter))
+			.setIndicator(getString(R.string.menu_taximeter), res.getDrawable(R.layout.tab_icon_taximeter))
 			.setContent(intentAndroid);
 		tabHost.addTab(spec);
-		*/
+
 		tabHost.setCurrentTab(0);
 	}
 	
@@ -119,7 +123,6 @@ public class MainTabActivity extends TabActivity {
 	             getBaseContext().getResources().getDisplayMetrics());
         }		
         mySQLiteAdapter.close();
-        
 	}
 	
 	/*	

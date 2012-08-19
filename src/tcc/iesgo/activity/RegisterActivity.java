@@ -1,18 +1,13 @@
 package tcc.iesgo.activity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +37,6 @@ public class RegisterActivity extends Activity {
 	Spinner language;
 	EditText inputName;
 	EditText inputEmail;
-	EditText inputCpf;
 	EditText inputPhone;
 	EditText inputPassword;
 	TextView registerErrorMsg;
@@ -52,7 +46,6 @@ public class RegisterActivity extends Activity {
 	TextView textLang;
 	TextView textName;
 	TextView textEmail;
-	TextView textCpf;
 	TextView textPhone;
 	TextView textPassword;
 	
@@ -72,8 +65,8 @@ public class RegisterActivity extends Activity {
 	//Verifica se o e-mail informado é válido
 	public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
 			  "[a-zA-Z0-9+._%-+]{1,256}" + "@"
-			+ "[a-zA-Z0-9][a-zA-Z0-9-]{0,64}" + "(" + "."
-			+ "[a-zA-Z0-9][a-zA-Z0-9-]{0,25}" + ")+");
+			+ "[a-zA-Z0-9][a-zA-Z0-9-]{1,64}" + "(" + "."
+			+ "[a-zA-Z0-9][a-zA-Z0-9-]{1,25}" + ")+");
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,8 +80,6 @@ public class RegisterActivity extends Activity {
 		inputName.setHint(getString(R.string.register_name_description));
 		inputEmail = (EditText) findViewById(R.id.et_email);
 		inputEmail.setHint(getString(R.string.register_email_description));
-		inputCpf = (EditText) findViewById(R.id.et_cpf);
-		inputCpf.setHint(getString(R.string.register_cpf_description));
 		inputPhone = (EditText) findViewById(R.id.et_phone);
 		inputPhone.setHint(getString(R.string.register_phone_description));
 		inputPassword = (EditText) findViewById(R.id.et_pw);
@@ -98,7 +89,6 @@ public class RegisterActivity extends Activity {
 		textLang = (TextView) findViewById(R.id.tv_lang);
 		textName = (TextView) findViewById(R.id.tv_name);
 		textEmail = (TextView) findViewById(R.id.tv_email);
-		textCpf = (TextView) findViewById(R.id.tv_cpf);
 		textPhone = (TextView) findViewById(R.id.tv_phone);
 		textPassword = (TextView) findViewById(R.id.tv_pw);
 		
@@ -128,15 +118,13 @@ public class RegisterActivity extends Activity {
 			//Verifica se todos os campos foram preenchidos corretamente
 			@Override
 			public void onClick(View view) {
-				String[] data = {inputName.getText().toString(), inputEmail.getText().toString(), inputCpf.getText().toString(),
+				String[] data = {inputName.getText().toString(), inputEmail.getText().toString(), 
 						 inputPhone.getText().toString(), inputPassword.getText().toString(), lang};
 				
 				if (inputName.getText().toString().length() <= 3)
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_name), Toast.LENGTH_SHORT).show();
 				else if(!checkEmail(inputEmail.getText().toString()))
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_email), Toast.LENGTH_SHORT).show();
-				else if(!validateCpf(inputCpf.getText().toString()))
-					Toast.makeText(getApplicationContext(), getString(R.string.register_error_cpf), Toast.LENGTH_SHORT).show();
 				else if(inputPhone.getText().toString().length() < 8)
 					Toast.makeText(getApplicationContext(), getString(R.string.register_error_phone), Toast.LENGTH_SHORT).show();
 				else if(inputPassword.getText().toString().length() < 5)
@@ -177,7 +165,6 @@ public class RegisterActivity extends Activity {
 				    	textLang.setText(R.string.register_lang);
 				    	textName.setText(R.string.register_name);
 					    textEmail.setText(R.string.register_email);
-					    textCpf.setText(R.string.register_cpf);
 					    textPhone.setText(R.string.register_phone);
 					    textPassword.setText(R.string.register_pw);
 					    btnRegister.setText(R.string.register_button);
@@ -202,32 +189,21 @@ public class RegisterActivity extends Activity {
 	public void register(final String[] data) {
 		
 		progressDialog = ProgressDialog.show(RegisterActivity.this, 
-				getString(R.string.pd_title), getString(R.string.pd_content));
+				getString(R.string.pd_title), getString(R.string.pd_content_register));
 		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					// Autentica como admin
-					HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
-					List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-					nameValuePairs.add(new BasicNameValuePair("name", getString(R.string.login_name)));
-					nameValuePairs.add(new BasicNameValuePair("pass", getString(R.string.login_pass)));
-					nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
-					//Executa a requisição
-					httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-					httpclient.execute(httppost);
-					
-					HttpResponse rp = httpclient.execute(httppost);
-	
-					HttpPost post = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_create_user)
-							+ data[0] + "/" + data[1] + "/" + data[2] + "/" + data[4] + "/" + data[5]);
+
+					HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_create_user)
+							+ data[0].replace(" ", "%20") + "/" + data[1] + "/" + data[2] + "/" + data[3] + "/" + data[4] + "/" + getString(R.string.form_id_new));
 
 						//Salva usuário na nuvem
-						rp = httpclient.execute(post);
+						HttpResponse rp = httpclient.execute(httppost);
 						
 						String response = "0";
-						
+
 						if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 							response = EntityUtils.toString(rp.getEntity());
 
@@ -280,7 +256,7 @@ public class RegisterActivity extends Activity {
 	}
 	
 	private void gotoMap() {
-		Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+		Intent i = new Intent(RegisterActivity.this, MainTabActivity.class);
 		startActivity(i);
 	}
 	
@@ -288,46 +264,7 @@ public class RegisterActivity extends Activity {
 		jObject = new JSONObject(response);
 		return jObject.getString(option);
 	}
-	
-    public boolean validateCpf(String cpfNum) {
-    	try {
-	        int[] cpf = new int[cpfNum.length()]; //Define o valor com o tamanho da string  
-	        int resultP = 0;  
-	        int resultS = 0;  
-	        
-	        //Converte a string para um array de integer  
-	        for (int i = 0; i < cpf.length; i++) {  
-	            cpf[i] = Integer.parseInt(cpfNum.substring(i, i + 1));  
-	        }  
-	  
-	        //Calcula o primeiro número(DIV) do cpf  
-	        for (int i = 0; i < 9; i++) {  
-	            resultP += cpf[i] * (i + 1);  
-	        }  
-	        int divP = resultP % 11;
-	  
-	        //Se o resultado for diferente ao 10º digito do cpf retorna falso  
-	        if (divP != cpf[9]) { 
-	            return false;  
-	        } else {  
-	            //Calcula o segundo número(DIV) do cpf  
-	            for (int i = 0; i < 10; i++) {  
-	                resultS += cpf[i] * (i);  
-	            }  
-	            int divS = resultS % 11;  
-	  
-	            //Se o resultado for diferente ao 11º digito do cpf retorna falso  
-	            if (divS != cpf[10]) {  
-	                return false;  
-	            }  
-	        }
-    	} catch (Exception e) {
-			return false;
-		}
-        return true;  
-    }
 
-	
     public boolean checkEmail(String email) {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }

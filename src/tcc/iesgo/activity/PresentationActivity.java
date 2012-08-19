@@ -71,28 +71,19 @@ public class PresentationActivity extends Activity {
 				            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 				            HttpResponse response = httpclient.execute(httppost); //Resposta do servidor
-
-				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
+				            
+				            //Caso os dados estejam corretos, redirecona p/ o mapa, se não, p/ a tela inicial.
+				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
 				                Intent i = new Intent(PresentationActivity.this, MainTabActivity.class);
 				                startActivity(i);
-				            } else { //Se não, redireciona para a tela inicial
+				            } else {
 					    	    Intent i = new Intent(PresentationActivity.this, MainActivity.class);
 					            startActivity(i);
 				            }
 				            	
 				       } catch(IOException e) {
-							final AlertDialog.Builder dialog = new AlertDialog.Builder(getParent());
-							dialog.setTitle(getString(R.string.ad_title_error));
-							dialog.setMessage(getString(R.string.ad_content_error_off));
-							dialog.setCancelable(false);
-							dialog.setNegativeButton(getString(R.string.ad_button_negative),
-									new DialogInterface.OnClickListener() {
-										@Override
-										public void onClick(DialogInterface dialog,	int id) {
-											finish();
-										}
-									});
-							dialog.show();
+				    	    Intent i = new Intent(PresentationActivity.this, MainActivity.class);
+				            startActivity(i);
 				       }
 			       } else { //Caso não exista nenhum registro, redireciona o usuário para página principal
 			    	   Intent i = new Intent(getApplicationContext(), MainActivity.class);

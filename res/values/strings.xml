@@ -8,23 +8,29 @@
     <string name="ad_title_error">Ocorreu um erro!</string>
     <string name="ad_content_error_off">O servidor não está disponível.</string>
     <string name="ad_content_error_unexpected">Aconteceu um erro inesperado na aplicação.</string>
-    <string name="ad_button_negative">OK</string>
+    <string name="ad_button_positive">OK</string>
+    <string name="ad_button_negative">Cancelar</string>
     
     <!-- Configuração do Web Service -->
     
-    <string name="url_webservice">http://ec2-177-71-152-98.sa-east-1.compute.amazonaws.com/txandroid/</string>
+    <string name="url_webservice">http://ec2-177-71-237-155.sa-east-1.compute.amazonaws.com/txandroid/</string>
     <string name="url_authentication">user/</string>
     <string name="url_login_user">login/</string>
     <string name="url_create_user">createuser/</string>
     <string name="url_help">http://www.google.com.br</string>
 	<string name="form_id">user_login</string>
 	<string name="form_id_login">user_login</string>
-	<string name="form_id_new">ecotaxi_user_new_form</string>
+	<string name="form_id_new">user_new</string>
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>
     
+	<!-- Favorites -->
+	
+	<string name="fav_"></string>
+    
     <!-- Login -->
     
+    <string name="login_remember">Lembrar os meus dados</string>
     <string name="login_button_enter">Entrar</string>
     <string name="login_email_description">example@gmail.com</string>
     <string name="login_error_authentication">Os dados informados estão incorretos!</string>
@@ -36,9 +42,21 @@
 	<string name="main_button_login">Efetuar Login</string>
 	<string name="main_button_exit">Sair</string>
 	
+	<!-- Map -->
+	
+	<string name="map_search_point">Buscando táxis próximos a você, aguarde..</string>
+	<string name="map_pd_update_map">Atualizando a sua localização..</string>
+	
 	<!-- TabHost -->
 	
-	<string name="menu_mapa">Mapa</string>
+	<string name="menu_map">Mapa</string>
+	<string name="menu_records">Histórico</string>
+	<string name="menu_favorites">Favoritos</string>
+	<string name="menu_taximeter">Taximetro</string>
+	
+	<!-- Records -->
+	
+	<string name="rec_"></string>
 	
 	<!-- Register -->
 	
@@ -46,8 +64,6 @@
 	<string name="register_name_description">John Lennon</string>
 	<string name="register_email">E-mail</string>
 	<string name="register_email_description">john@gmail.com</string>
-	<string name="register_cpf">CPF (Sem pontos ou traços)</string>
-	<string name="register_cpf_description">00000000000</string>
 	<string name="register_phone">Telefone</string>
 	<string name="register_phone_description">1199999999</string>
 	<string name="register_pw">Senha</string>
@@ -61,7 +77,6 @@
     </string-array>
     <string name="register_error_name">Preencha o campo NOME corretamente!</string>
     <string name="register_error_email">Preencha o campo E-MAIL corretamente!</string>
-    <string name="register_error_cpf">Preencha o campo CPF corretamente!</string>
     <string name="register_error_phone">Preencha o campo TELEFONE corretamente!</string>
     <string name="register_error_pw">Preencha o campo SENHA corretamente!</string>
     <string name="register_error_off">O sistema está fora do ar!</string>
@@ -75,5 +90,15 @@
     <!-- ProgressDialog -->
     
     <string name="pd_title">Transmitindo dados</string>
-    <string name="pd_content">Aguarde, estamos realizando o seu cadastro&#8230;</string>
+    <string name="pd_content_register">Aguarde, estamos realizando o seu cadastro&#8230;</string>
+    <string name="pd_content_login">Aguarde, estamos realizando o seu login&#8230;</string>
+    
+    <!-- Taximeter -->
+	
+	<string name="tax_"></string>
+    
+    <!-- Gps -->
+    
+    <string name="gps_disabled">GPS desavivado</string>
+    <string name="gps_disabled_message">F</string>
 </resources>
