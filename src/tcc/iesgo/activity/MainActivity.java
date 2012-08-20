@@ -65,12 +65,11 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		finish();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		finish();
+		MainActivity.this.finish();
 	}
 }

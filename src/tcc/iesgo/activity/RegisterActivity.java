@@ -7,12 +7,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import tcc.iesgo.activity.R;
+import tcc.iesgo.http.connection.HttpClientFactory;
 import tcc.iesgo.persistence.SQLiteAdapter;
 
 import android.app.Activity;
@@ -50,7 +50,7 @@ public class RegisterActivity extends Activity {
 	TextView textPassword;
 	
 	SQLiteAdapter mySQLiteAdapter;
-	HttpClient httpclient = new DefaultHttpClient();
+	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
 	
 	Handler mHandler = new Handler();
 	ProgressDialog progressDialog;
@@ -190,6 +190,7 @@ public class RegisterActivity extends Activity {
 		
 		progressDialog = ProgressDialog.show(RegisterActivity.this, 
 				getString(R.string.pd_title), getString(R.string.pd_content_register));
+		progressDialog.setIcon(R.drawable.progress_dialog);
 		
 		new Thread(new Runnable() {
 			@Override
@@ -277,12 +278,11 @@ public class RegisterActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		finish();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		finish();
+		RegisterActivity.this.finish();
 	}
 }

@@ -1,8 +1,25 @@
 package tcc.iesgo.activity;
 
+import tcc.iesgo.activity.R;
+import tcc.iesgo.overlay.ItemizedOverlay;
+import tcc.iesgo.http.connection.HttpClientFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import tcc.iesgo.activity.R;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -10,6 +27,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
+import com.google.android.maps.OverlayItem;
 
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -25,6 +43,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ClientMapActivity extends MapActivity implements LocationListener {
 	
@@ -34,24 +53,47 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 	LocationManager lm;
 	MyLocationOverlay myLocationOverlay; //Overlay do usuário
 	
-	Drawable dTaxi;
+	OverlayItem overlayitem;
 	
-	TextView mapInfo;
+	ItemizedOverlay itemizedOverlay;
 	
 	GeoPoint geoActual;
+	GeoPoint geoTaxi;
 	
 	ProgressDialog progressDialog;
 	Handler mHandler = new Handler();
 	
+	Drawable dTaxi;
+	
+	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
+	
+	private JSONObject jObject;
+	
+	TextView mapInfo;
+	
 	private int minLatitude, maxLatitude, minLongitude, maxLongitude;
+	
+	private String email, password;
+	private String result;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        init();
+        
+		// Recupera os extras da intent anterior
+		Bundle extras = getIntent().getExtras();
+		
+		email = extras.getString("email");
+		password = extras.getString("pass");
+		
+        try {
+			init();
+		} catch (Exception e) {
+			Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+		}
     }
     
-    private void init(){
+    private void init() throws ClientProtocolException, IOException, JSONException{
 		//Layout da aplicacao
 		setContentView(R.layout.map);
 		
@@ -88,15 +130,21 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		dTaxi = ClientMapActivity.this.getResources().getDrawable(R.drawable.icon_taxi);
 
 		mapInfo = (TextView) findViewById(R.id.map_info);
-
+		
+		login(email, password);
+		
 		showMap(location);
     }
     
     private class UpdateLocation extends AsyncTask<Location, Void, Integer> {
 
+		//UpdateLocation updateLocation = new UpdateLocation();
+		//updateLocation.execute(location);
+    	
         @Override
         protected void onPreExecute() {
         	progressDialog = ProgressDialog.show(ClientMapActivity.this, getString(R.string.pd_title), getString(R.string.map_pd_update_map));
+        	progressDialog.setIcon(R.drawable.progress_dialog);
         }
         
 		@Override
@@ -105,7 +153,13 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {
-						updateMap(location);
+						try {
+							updateClientLocation(location);
+						} catch (ClientProtocolException e) {
+							Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+						} catch (IOException e) {
+							Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 			}
@@ -122,10 +176,14 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 	//Chamando quando a posição do gps é alterada
 	@Override
 	public void onLocationChanged(Location location) {
-		showMap(location);
+		try {
+			showMap(location);
+		} catch (JSONException e) {
+			Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+		}
 	}
 
-	public void showMap(Location location) {
+	public void showMap(Location location) throws JSONException {
 		if (location == null)
 			location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER); //Último local registrado
 
@@ -134,16 +192,126 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		minLongitude = Integer.MAX_VALUE;
 		maxLongitude = Integer.MIN_VALUE;
 		
-		UpdateLocation updateLocation = new UpdateLocation();
-		updateLocation.execute(location);
-	}
+		//result = getJsonResult(getTaxis(location), "result"); //Json
+		
+		//Rotina p/ atualizar os objetos do mapa
+		Overlay obj = mapOverlays.get(0); //Posição atual do usuário
+		mapOverlays.clear(); // Limpa Overlays do mapa
+		mapOverlays.add(obj); // Adiciona o usuario no mapa
+		//Fim rotina
+		
+		//GeoPoint da posição atual do usuário
+		geoActual = new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6));
+		
+		/** TODO: Fazer rotina para inserir dinâmicamente os táxis no mapa. */
+		
+		double lat = -15.543997;
+		double lng = -47.328652;
+		//GeoPoint da posição atual do taxista
+		geoTaxi = new GeoPoint((int) (lat * 1E6),(int) (lng * 1E6));
+		
+		overlayitem = new OverlayItem(geoTaxi, "João Aparecido dos Santos", "Descrição:\nDistância:1,1 km\nVeículo: Corsa Sedan\nPlaca: ABC-1234\nLicença nº: 00112-X\nIdiomas Conhecidos: Português, Inglês\n");
+		
+		itemizedOverlay = new ItemizedOverlay(dTaxi, mapView, geoTaxi, geoActual, itemizedOverlay);
+		
+		itemizedOverlay.addOverlay(overlayitem);
+		
+		mapOverlays.add(itemizedOverlay);
+		
+		/** TODO: Fim da rotina */
+		
+		//Localização atual do usuário
+		myLocationOverlay = new MyLocationOverlay(ClientMapActivity.this,mapView);
+		//Habilita o ponto azul de localizacao na tela
+		myLocationOverlay.enableMyLocation();
+		//Habilita atualizacoes do sensor
+		myLocationOverlay.enableCompass();
+		
+		//Adiciona o overlay no mapa
+		mapOverlays.add(myLocationOverlay);
+		
+		//Rotina p/ forçar que todos os objetos encontrados apareçam no mapa
+        maxLatitude = Math.max(geoActual.getLatitudeE6(), maxLatitude);
+        minLatitude = Math.min(geoActual.getLatitudeE6(), minLatitude);
+        maxLongitude = Math.max(geoActual.getLongitudeE6(), maxLongitude);
+        minLongitude = Math.min(geoActual.getLongitudeE6(), minLongitude);
 
+        maxLatitude = Math.max(geoTaxi.getLatitudeE6(), maxLatitude);
+        minLatitude = Math.min(geoTaxi.getLatitudeE6(), minLatitude);
+        maxLongitude = Math.max(geoTaxi.getLongitudeE6(), maxLongitude);
+        minLongitude = Math.min(geoTaxi.getLongitudeE6(), minLongitude);
+        
+        mc.animateTo(new GeoPoint((maxLatitude + minLatitude)/2, (maxLongitude + minLongitude)/2 ));
+        mc.zoomToSpan(Math.abs(maxLatitude - minLatitude), Math.abs(maxLongitude - minLongitude));
+
+        Integer zoomlevel = mapView.getZoomLevel();
+        Integer zoomlevel2 = zoomlevel - 1;
+        mc.setZoom(zoomlevel2);
+        //Fim rotina
+		
+		try {
+			updateClientLocation(location); //Atualiza a posição do cliente
+		} catch (Exception e) {
+			Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	//Busca os táxis próximos a posicao informada
+	public String getTaxis(Location location) {
+		if (location != null) {
+			try {
+				HttpPost post = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_get_taxis) 
+					+ location.getLatitude() + "/" + location.getLongitude() + "/" + getString(R.string.form_id_get_taxis));
+				
+				HttpResponse rp = httpclient.execute(post);
+			
+				if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
+					this.result = EntityUtils.toString(rp.getEntity());
+			} catch (IOException e) {
+				Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+			}
+		}
+		return this.result;
+	}
+	
+	//Atualiza a posição atual do usuário no webservice
+	private void updateClientLocation(Location location) throws ClientProtocolException, IOException{
+		if (location != null){
+			
+			HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_update_user_location)
+					+ location.getLatitude() + "/" + location.getLongitude() + "/" + getString(R.string.form_id_update_loc));
+			
+			httpclient.execute(httppost);
+		}
+	}
+	
+	//Autentica o usuário no webservice
+	private void login(String email, String password) throws ClientProtocolException, IOException{
+			HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+			nameValuePairs.add(new BasicNameValuePair("name", email));
+			nameValuePairs.add(new BasicNameValuePair("pass", password));
+			nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
+
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			
+			//Executa a requisição
+			httpclient.execute(httppost);
+	}
+	
+	//Retorna um resultado de um Json
+	private String getJsonResult(String response, String option) throws JSONException{
+		jObject = new JSONObject(response);
+		return jObject.getString(option);
+	}
+	
 	//Chamado quando o GPS esta desativado (abre as conf. do GPS)
 	@Override
 	public void onProviderDisabled(String arg0) {
 		final AlertDialog.Builder dialog = new AlertDialog.Builder(getParent());
 		dialog.setTitle(getString(R.string.gps_disabled));
 		dialog.setMessage(getString(R.string.gps_disabled_message));
+		dialog.setIcon(R.drawable.gps_enable);
 		dialog.setCancelable(false);
 		
 		dialog.setPositiveButton(getString(R.string.ad_button_positive),
@@ -160,31 +328,16 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 					@Override
 					public void onClick(DialogInterface dialog,	int id) {
 						dialog.cancel();
-						finish();
+		                finish();
 					}
 		});
 		dialog.show();
-	}
-	
-	//Atualiza o mapa com a posicao atual
-	private void updateMap(Location location) {
-		if (location != null) {
-			Double geoLat = location.getLatitude() * 1E6;
-			Double geoLng = location.getLongitude() * 1E6;
-			
-			geoActual = new GeoPoint(geoLat.intValue(), geoLng.intValue());	
-			
-			mapView.invalidate(); // atualiza o mapa
-			
-			mc.animateTo(geoActual);
-		}
 	}
 
 	//Chamado quando o GPS esta ativado
 	@Override
 	public void onProviderEnabled(String arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	//Chamado quando o status do GPS e alterado

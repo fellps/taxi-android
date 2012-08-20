@@ -13,20 +13,27 @@
     
     <!-- Configuração do Web Service -->
     
-    <string name="url_webservice">http://ec2-177-71-237-155.sa-east-1.compute.amazonaws.com/txandroid/</string>
+    <string name="url_webservice">http://ec2-177-71-226-121.sa-east-1.compute.amazonaws.com/txandroid/</string>
     <string name="url_authentication">user/</string>
     <string name="url_login_user">login/</string>
     <string name="url_create_user">createuser/</string>
+    <string name="url_update_user_location">updateuserloc/</string>
     <string name="url_help">http://www.google.com.br</string>
 	<string name="form_id">user_login</string>
 	<string name="form_id_login">user_login</string>
 	<string name="form_id_new">user_new</string>
+	<string name="form_id_update_loc">user_update_loc</string>
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>
     
 	<!-- Favorites -->
 	
 	<string name="fav_"></string>
+	
+    <!-- Gps -->
+    
+    <string name="gps_disabled">GPS desativado</string>
+    <string name="gps_disabled_message">Ative o seu GPS para prosseguir.</string>
     
     <!-- Login -->
     
@@ -53,6 +60,8 @@
 	<string name="menu_records">Histórico</string>
 	<string name="menu_favorites">Favoritos</string>
 	<string name="menu_taximeter">Taximetro</string>
+	<string name="menu_config">Configurações</string>
+	<string name="menu_exit">Sair</string>
 	
 	<!-- Records -->
 	
@@ -96,9 +105,5 @@
     <!-- Taximeter -->
 	
 	<string name="tax_"></string>
-    
-    <!-- Gps -->
-    
-    <string name="gps_disabled">GPS desavivado</string>
-    <string name="gps_disabled_message">F</string>
+  
 </resources>

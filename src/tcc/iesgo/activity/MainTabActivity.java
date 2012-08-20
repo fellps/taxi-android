@@ -11,6 +11,9 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TabHost;
 
 public class MainTabActivity extends TabActivity {
@@ -18,6 +21,8 @@ public class MainTabActivity extends TabActivity {
 	public static TabHost tabHost;
 	
 	SQLiteAdapter mySQLiteAdapter;
+	
+	private String email, password;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +32,12 @@ public class MainTabActivity extends TabActivity {
 		 * IMPLEMENTAR ESTRUTURA PARA BUSCAR O IDIOMA DO USUÁRIO
 		 * QUE ESTÁ NO WEBSERVICE E SALVA-LO NO BD DO CELULAR
 		 */
+		
+		// Recupera os extras da intent anterior
+		Bundle extras = getIntent().getExtras();
+		
+		email = extras.getString("email");
+		password = extras.getString("pass");
 		
 		mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
         mySQLiteAdapter.openToRead(); //Abre para leitura
@@ -59,12 +70,13 @@ public class MainTabActivity extends TabActivity {
 		TabHost.TabSpec spec;
 		
 		Intent intentAndroid = new Intent().setClass(this, ClientMapActivity.class);
+		intentAndroid.putExtra("email", email);
+		intentAndroid.putExtra("pass", password);
 		spec = tabHost
 				.newTabSpec(getString(R.string.menu_map))
 				.setIndicator(getString(R.string.menu_map), res.getDrawable(R.layout.tab_icon_map))
 				.setContent(intentAndroid);
 		tabHost.addTab(spec);
-
 
 		intentAndroid = new Intent().setClass(this, RecordsActivity.class);
 		spec = tabHost
@@ -124,12 +136,27 @@ public class MainTabActivity extends TabActivity {
         }		
         mySQLiteAdapter.close();
 	}
-	
-	/*	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {     
-	    menu.add(0,1,0,"OK");
-	    return true;
-	}
-	*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        super.onCreateOptionsMenu(menu);
+        MenuInflater mi = getMenuInflater();
+        mi.inflate(R.menu.menu, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+        case R.id.menu_exit:
+            MainTabActivity.this.finish();
+            return true;
+        case R.id.menu_config:
+            Intent i = new Intent(MainTabActivity.this, ConfigurationActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

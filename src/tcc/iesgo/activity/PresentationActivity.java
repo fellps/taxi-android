@@ -17,16 +17,17 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import tcc.iesgo.activity.R;
+import tcc.iesgo.http.connection.HttpClientFactory;
+import tcc.iesgo.overlay.RoutePath;
 import tcc.iesgo.persistence.SQLiteAdapter;
 
 public class PresentationActivity extends Activity {
 
 	SQLiteAdapter mySQLiteAdapter;
-	HttpClient httpclient = new DefaultHttpClient();
+	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,9 @@ public class PresentationActivity extends Activity {
 				            
 				            //Caso os dados estejam corretos, redirecona p/ o mapa, se não, p/ a tela inicial.
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
-				                Intent i = new Intent(PresentationActivity.this, MainTabActivity.class);
+				                Intent i = new Intent(PresentationActivity.this, RoutePath.class);
+				                i.putExtra("email", username);
+				                i.putExtra("pass", password);
 				                startActivity(i);
 				            } else {
 					    	    Intent i = new Intent(PresentationActivity.this, MainActivity.class);
@@ -112,7 +115,6 @@ public class PresentationActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		finish();
 	}
 	
 	//Chamado quando a activity não é visível para o usuário
@@ -120,6 +122,6 @@ public class PresentationActivity extends Activity {
 	protected void onStop() {
         super.onStop();
         mySQLiteAdapter.close();
-        finish();
+        PresentationActivity.this.finish();
     }
 }

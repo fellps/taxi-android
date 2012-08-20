@@ -9,24 +9,49 @@
     <string name="ad_content_error_off">O servidor não está disponível.</string>
     <string name="ad_content_error_unexpected">Aconteceu um erro inesperado na aplicação.</string>
     <string name="ad_button_positive">OK</string>
+    <string name="ad_button_yes">Sim</string>
+    <string name="ad_button_no">Não</string>
     <string name="ad_button_negative">Cancelar</string>
+    
+    <!-- Balloon -->
+    
+    <string name="balloon_item_title">ballon_item_title</string>
+    <string name="balloon_item_snippet">balloon_item_snippet</string>
+    <string name="balloon_call_taxi">Chamar esse táxi?</string>
+    <string name="balloon_error_title">Ocorreu um erro</string>
+    <string name="balloon_error_distance">Impossível traçar rota para esse local. Você parece estar muito longe.</string>
     
     <!-- Configuração do Web Service -->
     
-    <string name="url_webservice">http://ec2-177-71-237-155.sa-east-1.compute.amazonaws.com/txandroid/</string>
+    <string name="url_webservice">http://ec2-177-71-226-121.sa-east-1.compute.amazonaws.com/txandroid/</string>
     <string name="url_authentication">user/</string>
     <string name="url_login_user">login/</string>
     <string name="url_create_user">createuser/</string>
+    <string name="url_update_user_location">updateuserloc/</string>
+    <string name="url_get_taxis">gettaxis/</string>
     <string name="url_help">http://www.google.com.br</string>
+    
 	<string name="form_id">user_login</string>
 	<string name="form_id_login">user_login</string>
 	<string name="form_id_new">user_new</string>
+	<string name="form_id_update_loc">user_update_loc</string>
+	<string name="form_id_get_taxis">user_get_taxis</string>
+	
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>
+    
+    <!-- ClientMap -->
+	
+	<string name="cm_error_json">Ocorreu um erro inesperado na leitura dos dados do servidor.</string>
     
 	<!-- Favorites -->
 	
 	<string name="fav_"></string>
+	
+    <!-- Gps -->
+    
+    <string name="gps_disabled">GPS desativado</string>
+    <string name="gps_disabled_message">Ative o seu GPS para prosseguir.</string>
     
     <!-- Login -->
     
@@ -34,7 +59,7 @@
     <string name="login_button_enter">Entrar</string>
     <string name="login_email_description">example@gmail.com</string>
     <string name="login_error_authentication">Os dados informados estão incorretos!</string>
-    <string name="login_error_connection">Ocorreu um erro na conexão</string>
+    <string name="login_error_connection">Ocorreu um erro na conexão, tente novamente mais tarde!</string>
     
     <!-- Main -->
 	
@@ -53,6 +78,8 @@
 	<string name="menu_records">Histórico</string>
 	<string name="menu_favorites">Favoritos</string>
 	<string name="menu_taximeter">Taximetro</string>
+	<string name="menu_config">Configurações</string>
+	<string name="menu_exit">Sair</string>
 	
 	<!-- Records -->
 	
@@ -96,9 +123,5 @@
     <!-- Taximeter -->
 	
 	<string name="tax_"></string>
-    
-    <!-- Gps -->
-    
-    <string name="gps_disabled">GPS desavivado</string>
-    <string name="gps_disabled_message">F</string>
+  
 </resources>

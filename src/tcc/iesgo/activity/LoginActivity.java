@@ -1,17 +1,11 @@
 package tcc.iesgo.activity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import tcc.iesgo.activity.RegisterActivity;
+import tcc.iesgo.http.connection.HttpClientFactory;
 import tcc.iesgo.persistence.SQLiteAdapter;
 
 public class LoginActivity extends Activity {
@@ -45,7 +40,7 @@ public class LoginActivity extends Activity {
 	ProgressDialog progressDialog;
 	Handler mHandler = new Handler();
 	
-	HttpClient httpclient = new DefaultHttpClient();
+	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
 	
 	RegisterActivity register = new RegisterActivity();
 	
@@ -94,6 +89,7 @@ public class LoginActivity extends Activity {
 	private void login(final String email, final String password){
 		progressDialog = ProgressDialog.show(LoginActivity.this, 
 				getString(R.string.pd_title), getString(R.string.pd_content_login));
+		progressDialog.setIcon(R.drawable.progress_dialog);
 		
 		new Thread(new Runnable() {
 			@Override
@@ -112,33 +108,12 @@ public class LoginActivity extends Activity {
 							String result = getJsonResult(resultHttp, "result"); //Json
 							
 							if(result.equals("1")){
-								//Autentica o usuário no webservice
-								httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
-								List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-								nameValuePairs.add(new BasicNameValuePair("name", email));
-								nameValuePairs.add(new BasicNameValuePair("pass", password));
-								nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
-			
-								//Executa a requisição
-								httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-								rp = httpclient.execute(httppost);
-			
-					            if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK){ //Caso os dados estejam corretos, redirecona p/ o mapa.
-					            	resultHttp = EntityUtils.toString(rp.getEntity()); 
-					            	if(cbRemember.isChecked()){
-					            		saveCredentials(email, password);
-					            	}
-					            	gotoMap();
-					            } else { //Se não, exibe erro
-				    				mHandler.post(new Runnable() {
-				    					@Override
-				    					public void run() {
-						            		Toast.makeText(LoginActivity.this, getString(R.string.login_error_authentication), Toast.LENGTH_SHORT).show();
-								    	    registerErrorMsg.setText(getString(R.string.login_error_authentication));
-				    					}
-				    				});
-					            }
+				            	if(cbRemember.isChecked()){
+				            		saveCredentials(email, password);
+				            	}
+				            	gotoMap(email, password);
+
 							} else {
 			    				mHandler.post(new Runnable() {
 			    					@Override
@@ -184,8 +159,10 @@ public class LoginActivity extends Activity {
 		startActivity(i);
 	}
 	
-	private void gotoMap() {
+	private void gotoMap(String email, String password) {
 		Intent i = new Intent(LoginActivity.this, MainTabActivity.class);
+		i.putExtra("email", email);
+		i.putExtra("pass", password);
 		startActivity(i);
 	}
 	
@@ -203,12 +180,11 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		finish();
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		finish();
+		LoginActivity.this.finish();
 	}
 }

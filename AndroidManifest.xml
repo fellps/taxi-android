@@ -85,6 +85,18 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
+        
+        <activity
+            android:name="tcc.iesgo.activity.ConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        
+        <activity
+            android:name="tcc.iesgo.overlay.RoutePath"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
                 
     </application>
 </manifest>
