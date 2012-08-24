@@ -45,6 +45,12 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
+            android:name="tcc.iesgo.activity.RegisterContinueActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        
+        <activity
             android:name="tcc.iesgo.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"

@@ -5,6 +5,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.HttpParams;
 
+/**
+ * Classe responsável por reutilizar as conexões
+ * http do pacote apache. Evita conflitos nas requisições. 
+ */
+
 public class HttpClientFactory {
 
     private static DefaultHttpClient client;

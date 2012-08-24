@@ -212,13 +212,13 @@ public class RegisterActivity extends Activity {
 
 						if(result.equals("1")){
 							//Salva usuário no DB do Aplicativo
-							mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
-							mySQLiteAdapter.openToWrite();
-							mySQLiteAdapter.insert(data[0], data[4], lang);
-							mySQLiteAdapter.close();
+							//mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
+							//mySQLiteAdapter.openToWrite();
+							//mySQLiteAdapter.insert(data[0], data[4], lang);
+							//mySQLiteAdapter.close();
 							
 							//Abre o mapa
-							gotoMap();
+							gotoContinueInfo(data[0], data[4]);
 						} else if(result.equals("2")){
 							mHandler.post(new Runnable() {
 								@Override
@@ -256,8 +256,10 @@ public class RegisterActivity extends Activity {
 		startActivity(i);
 	}
 	
-	private void gotoMap() {
-		Intent i = new Intent(RegisterActivity.this, MainTabActivity.class);
+	private void gotoContinueInfo(String email, String password) {
+		Intent i = new Intent(RegisterActivity.this, RegisterContinueActivity.class);
+		i.putExtra("email", email);
+		i.putExtra("pass", password);
 		startActivity(i);
 	}
 	

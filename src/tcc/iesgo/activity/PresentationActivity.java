@@ -21,7 +21,6 @@ import org.apache.http.message.BasicNameValuePair;
 
 import tcc.iesgo.activity.R;
 import tcc.iesgo.http.connection.HttpClientFactory;
-import tcc.iesgo.overlay.RoutePath;
 import tcc.iesgo.persistence.SQLiteAdapter;
 
 public class PresentationActivity extends Activity {
@@ -57,7 +56,7 @@ public class PresentationActivity extends Activity {
 				        //Salva o nome e a senha do registro selecionado
 				        String username = cursor.getString(cursor.getColumnIndex(SQLiteAdapter.KEY_USERNAME));
 				        String password = cursor.getString(cursor.getColumnIndex(SQLiteAdapter.KEY_PASSWORD));
-				       
+
 				        mySQLiteAdapter.close(); //Fecha a conexão
 				        
 				        HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
@@ -75,7 +74,7 @@ public class PresentationActivity extends Activity {
 				            
 				            //Caso os dados estejam corretos, redirecona p/ o mapa, se não, p/ a tela inicial.
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
-				                Intent i = new Intent(PresentationActivity.this, RoutePath.class);
+				                Intent i = new Intent(PresentationActivity.this, MainTabActivity.class);
 				                i.putExtra("email", username);
 				                i.putExtra("pass", password);
 				                startActivity(i);

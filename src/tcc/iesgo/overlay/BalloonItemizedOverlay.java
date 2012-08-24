@@ -90,7 +90,7 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 		return true;
 	}
 
-	//Cria o BalloonViwe
+	//Cria o BalloonView
 	protected BalloonOverlayView<Item> createBalloonOverlayView() {
 		return new BalloonOverlayView<Item>(getMapView().getContext(), getBalloonBottomOffset());
 	}
@@ -186,7 +186,7 @@ public abstract class BalloonItemizedOverlay<Item extends OverlayItem> extends I
 			hideBalloon();
 		} else {
 			createAndDisplayBalloonOverlay();
-		}	
+		}
 	}
 	
 	//Cria e mostra a sobreposição do balão pela reciclagem atual 

@@ -9,7 +9,17 @@
     <string name="ad_content_error_off">O servidor não está disponível.</string>
     <string name="ad_content_error_unexpected">Aconteceu um erro inesperado na aplicação.</string>
     <string name="ad_button_positive">OK</string>
+    <string name="ad_button_yes">Sim</string>
+    <string name="ad_button_no">Não</string>
     <string name="ad_button_negative">Cancelar</string>
+    
+    <!-- Balloon -->
+    
+    <string name="balloon_item_title">ballon_item_title</string>
+    <string name="balloon_item_snippet">balloon_item_snippet</string>
+    <string name="balloon_call_taxi">Chamar esse táxi?</string>
+    <string name="balloon_error_title">Ocorreu um erro</string>
+    <string name="balloon_error_distance">Impossível traçar rota para esse local. Você parece estar muito longe.</string>
     
     <!-- Configuração do Web Service -->
     
@@ -18,14 +28,33 @@
     <string name="url_login_user">login/</string>
     <string name="url_create_user">createuser/</string>
     <string name="url_update_user_location">updateuserloc/</string>
+    <string name="url_get_taxis">gettaxis/</string>
+    <string name="url_request_taxi">requesttaxi/</string>
     <string name="url_help">http://www.google.com.br</string>
+    
 	<string name="form_id">user_login</string>
 	<string name="form_id_login">user_login</string>
 	<string name="form_id_new">user_new</string>
 	<string name="form_id_update_loc">user_update_loc</string>
+	<string name="form_id_get_taxis">user_get_taxis</string>
+	<string name="form_id_request_taxi">request_taxi</string>
+	
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>
     
+    <!-- ClientMap -->
+	
+	<string name="cm_error_json">Ocorreu um erro inesperado na leitura dos dados do servidor.</string>
+	<string name="cm_pd_request_msg">Aguarde, estamos enviando a sua solicitação..</string>
+	<string name="cm_pd_wait_request">segundos restantes..</string>
+	<string name="cm_ad_request_taxi_title_sucess">O táxi está a caminho!</string>
+	<string name="cm_ad_request_taxi_title_error">Ocorreu um erro!</string>
+	<string name="cm_ad_request_taxi_title_no_sucess">Pedido negado!</string>
+    <string name="cm_ad_request_taxi_content">Por favor aguarde até que o taxista responda a sua requisição.</string>
+    <string name="cm_ad_request_taxi_content_sucess">O taxista aceitou o seu pedido e está a caminho, por favor aguarde-o.</string>
+    <string name="cm_ad_response_taxi_no_success">O tempo foi excedido ou o taxista não aceitou a sua solicitação, por favor tente novamente ou escolha outro.</string>
+	<string name="cm_error_request_taxi">O pedido não pode ser enviado, tente novamente mais tarde.</string>
+	
 	<!-- Favorites -->
 	
 	<string name="fav_"></string>
@@ -41,7 +70,7 @@
     <string name="login_button_enter">Entrar</string>
     <string name="login_email_description">example@gmail.com</string>
     <string name="login_error_authentication">Os dados informados estão incorretos!</string>
-    <string name="login_error_connection">Ocorreu um erro na conexão</string>
+    <string name="login_error_connection">Ocorreu um erro na conexão, tente novamente mais tarde!</string>
     
     <!-- Main -->
 	
@@ -84,6 +113,10 @@
         <item>Inglês</item>
         <item>Espanhol</item>
     </string-array>
+    <string name="register_continue_info_title">Cadastro realizado com sucesso!\n</string>
+    <string name="register_continue_info_content">Parabéns, você acaba de ingressar nos serviços do aplicativo Taxi-Android!\n\nAntes de prosseguir, 
+        por favor, leia com atenção o manual de instruções abaixo e clique em finalizar.</string>
+    <string name="register_button_next">Finalizar Cadastro</string>
     <string name="register_error_name">Preencha o campo NOME corretamente!</string>
     <string name="register_error_email">Preencha o campo E-MAIL corretamente!</string>
     <string name="register_error_phone">Preencha o campo TELEFONE corretamente!</string>
