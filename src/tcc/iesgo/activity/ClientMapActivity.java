@@ -6,17 +6,13 @@ import tcc.iesgo.overlay.MyCustomLocationOverlay;
 import tcc.iesgo.http.connection.HttpClientFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 
@@ -39,7 +35,6 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,21 +63,13 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 	TextView mapInfo;
 	
 	private int minLatitude, maxLatitude, minLongitude, maxLongitude;
-	
-	private String email, password;
+
 	private String result;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-		// Recupera os extras da intent anterior
-		Bundle extras = getIntent().getExtras();
-		
-		email = extras.getString("email");
-		password = extras.getString("pass");
-		Log.i(email,password);
-        
+
         try {
 			init();
 		} catch (Exception e) {
@@ -127,8 +114,6 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		dTaxi = ClientMapActivity.this.getResources().getDrawable(R.drawable.icon_taxi);
 
 		mapInfo = (TextView) findViewById(R.id.map_info);
-		
-		login(email, password);
 		
 		showMap(location);
     }
@@ -256,22 +241,6 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 			
 			httpclient.execute(httppost);
 		}
-	}
-	
-	//Autentica o usuário no webservice
-	private void login(String email, String password) throws ClientProtocolException, IOException{
-			Log.i("###########", email+" "+password);
-			HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_authentication));
-			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-			nameValuePairs.add(new BasicNameValuePair("name", email));
-			nameValuePairs.add(new BasicNameValuePair("pass", password));
-			nameValuePairs.add(new BasicNameValuePair("form_id", getString(R.string.form_id_login)));
-
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-			
-			//Executa a requisição
-			HttpResponse rp = httpclient.execute(httppost);
-			Log.i("ClienteMap",EntityUtils.toString(rp.getEntity()));
 	}
 	
 	//Chamado quando o GPS esta desativado (abre as conf. do GPS)

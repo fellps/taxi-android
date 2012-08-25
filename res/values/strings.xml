@@ -2,6 +2,7 @@
 <resources>
     
     <string name="app_name">Taxi Android</string>
+    <string name="description">Aplicativo para solicitações de táxis próximos ao local de onde você está!</string>
     
     <!-- AlertDialog -->
     
@@ -23,7 +24,7 @@
     
     <!-- Configuração do Web Service -->
     
-    <string name="url_webservice">http://ec2-177-71-226-121.sa-east-1.compute.amazonaws.com/txandroid/</string>
+    <string name="url_webservice">http://177.71.226.121/txandroid/</string>
     <string name="url_authentication">user/</string>
     <string name="url_login_user">login/</string>
     <string name="url_create_user">createuser/</string>
@@ -46,10 +47,12 @@
 	
 	<string name="cm_error_json">Ocorreu um erro inesperado na leitura dos dados do servidor.</string>
 	<string name="cm_pd_request_msg">Aguarde, estamos enviando a sua solicitação..</string>
-	<string name="cm_pd_wait_request">segundos restantes..</string>
+	<string name="cm_pd_wait_request">Por favor, aguarde até que o taxista responda.\n\nTempo restante: </string>
+	<string name="cm_pd_wait_request_seconds"> segundos</string>
 	<string name="cm_ad_request_taxi_title_sucess">O táxi está a caminho!</string>
-	<string name="cm_ad_request_taxi_title_error">Ocorreu um erro!</string>
 	<string name="cm_ad_request_taxi_title_no_sucess">Pedido negado!</string>
+	<string name="cm_pd_request_taxi_title_sucess">Pedido enviado com sucesso!</string>
+	<string name="cm_ad_request_taxi_title_error">Ocorreu um erro!</string>
     <string name="cm_ad_request_taxi_content">Por favor aguarde até que o taxista responda a sua requisição.</string>
     <string name="cm_ad_request_taxi_content_sucess">O taxista aceitou o seu pedido e está a caminho, por favor aguarde-o.</string>
     <string name="cm_ad_response_taxi_no_success">O tempo foi excedido ou o taxista não aceitou a sua solicitação, por favor tente novamente ou escolha outro.</string>

@@ -75,8 +75,6 @@ public class PresentationActivity extends Activity {
 				            //Caso os dados estejam corretos, redirecona p/ o mapa, se não, p/ a tela inicial.
 				            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
 				                Intent i = new Intent(PresentationActivity.this, MainTabActivity.class);
-				                i.putExtra("email", username);
-				                i.putExtra("pass", password);
 				                startActivity(i);
 				            } else {
 					    	    Intent i = new Intent(PresentationActivity.this, MainActivity.class);

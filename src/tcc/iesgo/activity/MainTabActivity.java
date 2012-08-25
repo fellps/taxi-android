@@ -22,8 +22,6 @@ public class MainTabActivity extends TabActivity {
 	
 	SQLiteAdapter mySQLiteAdapter;
 	
-	private String email, password;
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,12 +30,6 @@ public class MainTabActivity extends TabActivity {
 		 * IMPLEMENTAR ESTRUTURA PARA BUSCAR O IDIOMA DO USUÁRIO
 		 * QUE ESTÁ NO WEBSERVICE E SALVA-LO NO BD DO CELULAR
 		 */
-		
-		// Recupera os extras da intent anterior
-		Bundle extras = getIntent().getExtras();
-		
-		email = extras.getString("email");
-		password = extras.getString("pass");
 		
 		mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
         mySQLiteAdapter.openToRead(); //Abre para leitura
@@ -70,8 +62,6 @@ public class MainTabActivity extends TabActivity {
 		TabHost.TabSpec spec;
 		
 		Intent intentAndroid = new Intent().setClass(this, ClientMapActivity.class);
-		intentAndroid.putExtra("email", email);
-		intentAndroid.putExtra("pass", password);
 		spec = tabHost
 				.newTabSpec(getString(R.string.menu_map))
 				.setIndicator(getString(R.string.menu_map), res.getDrawable(R.layout.tab_icon_map))
@@ -158,5 +148,4 @@ public class MainTabActivity extends TabActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Handler;
+
 import android.widget.Toast;
  
 import com.google.android.maps.MapView;
@@ -38,7 +39,8 @@ public class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
     private Context context;
 	MapView mapView;
 	
-	private String result;
+	private String result, resultStatus;
+	private String taxi_id;
 	
 	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
  
@@ -65,61 +67,15 @@ public class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 		@Override
 		protected String doInBackground(String... id_taxis) {
 			for(final String id_taxi : id_taxis){
-
+				taxi_id = id_taxi;
 				mHandler.post(new Runnable() {
 					@Override
 					public void run() {
 						try {
 							String status = requestTaxi(id_taxi);
-							if(status.equals("2")){ //se status = 2 (pendente)
-								mHandler.post(new Runnable() {
-									@Override
-									public void run() {
-										String status = "2";
-										int i = 6;
-										while(i>0){
-											status = "2"; //statusRequest(id_taxi);
-
-											if(status.equals("2")){ //se status = 2 (pendente)
-												try {
-													Thread.sleep(10000);
-												} catch (InterruptedException e) {
-													Toast.makeText(context, context.getString(R.string.cm_ad_request_taxi_title_error), Toast.LENGTH_SHORT).show();
-												}
-											} else if(status.equals("1")){ //se status = 1 (aprovado)
-												final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-												dialog.setTitle(R.string.cm_ad_request_taxi_title_sucess);
-												dialog.setMessage(R.string.cm_ad_request_taxi_content_sucess); //item.getSnippet()
-												dialog.setIcon(android.R.drawable.ic_menu_myplaces);
-												dialog.setCancelable(false);
-												dialog.setPositiveButton(R.string.ad_button_positive, new DialogInterface.OnClickListener() {
-													@Override
-													public void onClick(DialogInterface dialog, int id) {
-														dialog.cancel();
-													}
-												});
-												dialog.show();
-												break;
-											}
-											i--;
-										}
-										
-										if(status.equals("2")){ //se status = 2 (pendente)
-											final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-											dialog.setTitle(R.string.cm_ad_request_taxi_title_no_sucess);
-											dialog.setMessage(R.string.cm_ad_response_taxi_no_success); //item.getSnippet()
-											dialog.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-											dialog.setCancelable(false);
-											dialog.setPositiveButton(R.string.ad_button_positive, new DialogInterface.OnClickListener() {
-												@Override
-												public void onClick(DialogInterface dialog, int id) {
-													dialog.cancel();
-												}
-											});
-											dialog.show();
-										}
-									}
-								});
+							if(status.equals("0")){ //se status = 2 (pendente)
+					    		statusRequest sr = new statusRequest(context);	
+					    		sr.execute(0, 0, 90);
 							} else {
 								final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 								dialog.setTitle(R.string.ad_title_error);
@@ -154,6 +110,87 @@ public class CustomItemizedOverlay extends BalloonItemizedOverlay<OverlayItem> {
 	        progressDialog.setMessage(values[0]);
 	    }
     }
+    
+	
+	public class statusRequest extends AsyncTask<Integer, String, Integer>{
+	
+	    private ProgressDialog progress;
+	    private Context context;
+	
+	    public statusRequest(Context context) {
+	        this.context = context;
+	    }
+	
+	    @Override
+	    protected void onPreExecute() {
+	        //Cria novo um ProgressDialogo e exibe
+			progress = ProgressDialog.show(context, context.getString(R.string.cm_pd_request_taxi_title_sucess), context.getString(R.string.cm_pd_wait_request));
+			progress.setIcon(android.R.drawable.ic_menu_myplaces);
+	        progress.show();
+	    }
+	
+	    @Override
+	    protected Integer doInBackground(Integer... paramss) {
+	    	for (final int param : paramss){
+	    		for (int i = param; i > 0; i--) {
+	    			if(i==10||i==20||i==30||i==40||i==50||i==60||i==70||i==80||i==90){
+	    				resultStatus = requestTaxi(taxi_id);
+	    			}
+					
+					if(resultStatus.equals("0")){ //se status = 2 (pendente)
+						try {
+							Thread.sleep(1000);
+							publishProgress(context.getString(R.string.cm_pd_wait_request) + " " + i + " " + context.getString(R.string.cm_pd_wait_request_seconds));
+						} catch (InterruptedException e) {
+							Toast.makeText(context, context.getString(R.string.cm_ad_request_taxi_title_error), Toast.LENGTH_SHORT).show();
+						}
+					} else if(resultStatus.equals("1")){ //se status = 1 (aprovado)
+						final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+						dialog.setTitle(R.string.cm_ad_request_taxi_title_sucess);
+						dialog.setMessage(R.string.cm_ad_request_taxi_content_sucess); //item.getSnippet()
+						dialog.setIcon(android.R.drawable.ic_menu_myplaces);
+						dialog.setCancelable(false);
+						dialog.setPositiveButton(R.string.ad_button_positive, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.cancel();
+							}
+						});
+						dialog.show();
+						break;
+					}
+	    		}
+	    	}
+	        return 1;
+	    }
+	
+	    @Override
+	    protected void onPostExecute(Integer result) {
+	        //Cancela progressDialogo
+	        progress.dismiss();
+	        
+    		if(resultStatus.equals("0")){ //2
+				final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+				dialog.setTitle(R.string.cm_ad_request_taxi_title_no_sucess);
+				dialog.setMessage(R.string.cm_ad_response_taxi_no_success); //item.getSnippet()
+				dialog.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+				dialog.setCancelable(false);
+				dialog.setPositiveButton(R.string.ad_button_positive, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+				dialog.show();
+    		}
+	    }
+	
+	    @Override
+	    protected void onProgressUpdate(String... values) {
+	        //Atualiza mensagem
+	        progress.setMessage(values[0]);
+	    }
+	}
 
     //Faz uma requisição a um taxista
     private String requestTaxi(String id_taxi){
