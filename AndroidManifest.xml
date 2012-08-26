@@ -25,7 +25,7 @@
         <activity
             android:name=".PresentationActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,73 +36,73 @@
         <activity
             android:name="tcc.iesgo.activity.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.RegisterActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.RegisterContinueActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.HelpActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.MainTabActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.ClientMapActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.RecordsActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.FavoritesActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.TaximeterActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.activity.ConfigurationActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
             android:name="tcc.iesgo.overlay.RoutePath"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
                 
     </application>

@@ -141,8 +141,9 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		
 		//Rotina p/ atualizar os objetos do mapa
 		Overlay obj = mapOverlays.get(0); //Posição atual do usuário
-		mapOverlays.clear(); // Limpa Overlays do mapa
-		mapOverlays.add(obj); // Adiciona o usuario no mapa
+		mapOverlays.clear(); //Limpa Overlays do mapa
+		mapOverlays.add(obj); //Adiciona o usuario no mapa
+		mapView.invalidate(); //Atualiza o mapa
 		//Fim rotina
 		
 		//GeoPoint da posição atual do usuário
@@ -212,6 +213,8 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		} catch (Exception e) {
 			Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
 		}
+		
+		mapInfo.setText("Quantidade de táxis encontrados próximo a você: 2");
 	}
 	
 	//Busca os táxis próximos a posicao informada

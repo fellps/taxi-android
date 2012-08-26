@@ -95,6 +95,14 @@
 	<string name="menu_config">Configurações</string>
 	<string name="menu_exit">Sair</string>
 	
+	<!-- Taximeter -->
+	
+	<string name="map_taximeter_info">Escolha a sua origem e clique em prosseguir.</string>
+	<string name="map_taximeter_info_next">Escolha o seu destino e clique em finalizar.</string>
+	<string name="map_taximeter_next">Prosseguir</string>
+	<string name="map_taximeter_finish">Finalizar</string>
+	<string name="map_taximeter_restart">Reiniciar</string>
+	
 	<!-- Records -->
 	
 	<string name="rec_"></string>
@@ -137,9 +145,6 @@
     <string name="pd_title">Transmitindo dados</string>
     <string name="pd_content_register">Aguarde, estamos realizando o seu cadastro&#8230;</string>
     <string name="pd_content_login">Aguarde, estamos realizando o seu login&#8230;</string>
-    
-    <!-- Taximeter -->
-	
-	<string name="tax_"></string>
+    <string name="pd_content_loading">Aguarde, estamos processando a sua requisição..</string>
   
 </resources>
