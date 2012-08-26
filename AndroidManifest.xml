@@ -48,7 +48,7 @@
         <activity
             android:name="tcc.iesgo.activity.RegisterContinueActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="user"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
@@ -98,12 +98,12 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
-        
+
         <activity
-            android:name="tcc.iesgo.overlay.RoutePath"
+            android:name="tcc.iesgo.activity.TabGroupRecordsActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="user"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar" />        
                 
     </application>
 </manifest>

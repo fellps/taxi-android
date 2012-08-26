@@ -12,8 +12,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
  
-import org.apache.http.client.HttpClient;
-import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -21,10 +19,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
  
 import tcc.iesgo.activity.R;
-import tcc.iesgo.http.connection.HttpClientFactory;
 import tcc.iesgo.overlay.RouteOverlay;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -35,7 +34,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,29 +49,24 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
  
 public class TaximeterActivity extends MapActivity implements LocationListener{
-    /** Called when the activity is first created. */
  
-    MapView mapView;
-    private TaximeterActivity _activity;
- 
-    GeoPoint origGeoPoint,destGeoPoint;
+    private MapView mapView;
+    private TaximeterActivity taximeterActivity;
+    private GeoPoint origGeoPoint,destGeoPoint;
+    private Drawable origDrawable, destDrawable;
+    private CustomTaximeterItemizedOverlay origItemizedOverlay, destItemizedOverlay;
+    private OverlayItem orign, destiny;
+    private LocationManager lm;
+    private Document doc = null;
     private static List<Overlay> mOverlays;
-    Drawable origDrawable, destDrawable;
-    CustomTaximeterItemizedOverlay origItemizedOverlay, destItemizedOverlay;
-    OverlayItem orign, destiny;
 
-    private boolean process = false;
-    private boolean processFinish = false;
-    
-    LocationManager lm;
-    
-    Context context;
-    
-    Document doc = null;
-    
     private Button btAction;
     private TextView mapInfo;
+    
     private String distance, duration;
+    private boolean process = false;
+    private boolean processFinish = false;
+    private boolean processStatus = false;
     private int distanceMeters, durationSeconds;
     private float flag1 = 1.80f;
     private float flag2 = 2.34f;
@@ -83,7 +76,7 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_taximeter);
-        _activity = this;
+        taximeterActivity = TaximeterActivity.this;
  
         mapView = (MapView) findViewById(R.id.mapview_taximeter);
     	
@@ -107,16 +100,16 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
         
         origItemizedOverlay = new CustomTaximeterItemizedOverlay(this.origDrawable, TaximeterActivity.this, this.mapView);
         
-        OverlayItem srcoverlayitem = new OverlayItem(origGeoPoint, "Teste", "Ponto de origem");
+        OverlayItem origOverlayItem = new OverlayItem(origGeoPoint, "", "");
         
-        origItemizedOverlay.addOverlay(srcoverlayitem);
+        origItemizedOverlay.addOverlay(origOverlayItem);
         
         mOverlays.add(origItemizedOverlay);
 
         mapView.setBuiltInZoomControls(true);
         mapView.displayZoomControls(true);
         
-        mOverlays = mapView.getOverlays();
+        //mOverlays = mapView.getOverlays();
         mapView.getController().animateTo(origGeoPoint);
         mapView.getController().setZoom(15);
         
@@ -132,13 +125,31 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 					mapInfo.setText(getString(R.string.map_taximeter_info_next));
 					process = true;
 				} else if(btAction.getText().equals(getString(R.string.map_taximeter_finish))) {
-			        connectAsyncTask _connectAsyncTask = new connectAsyncTask(TaximeterActivity.this);
-			        _connectAsyncTask.execute(); 
-			        processFinish = true;
-			        btAction.setText(getString(R.string.map_taximeter_restart));
+					if(processStatus){
+				        connectAsyncTask _connectAsyncTask = new connectAsyncTask(TaximeterActivity.this);
+				        _connectAsyncTask.execute(); 
+				        processFinish = true;
+				        btAction.setText(getString(R.string.map_taximeter_restart));
+					} else {
+						final AlertDialog.Builder dialog = new AlertDialog.Builder(getParent());
+						dialog.setTitle(getString(R.string.ad_title_alert));
+						dialog.setMessage(getString(R.string.map_taximeter_error_marker));
+						dialog.setIcon(android.R.drawable.ic_menu_myplaces);
+						dialog.setCancelable(false);
+						
+						dialog.setPositiveButton(getString(R.string.ad_button_positive),
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,	int id) {
+										dialog.cancel();
+									}
+								});
+						dialog.show();
+					}
 				} else if(btAction.getText().equals(getString(R.string.map_taximeter_restart))){
 					process = false;
 					processFinish = false;
+					processStatus = false;
 					mapInfo.setText(getString(R.string.map_taximeter_info));
 					btAction.setText(getString(R.string.map_taximeter_next));
 					clearAllOverlays();
@@ -147,13 +158,6 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 				}
 			}
 		});
-    }
- 
- 
-    @Override
-    protected boolean isRouteDisplayed() {
-        // TODO Auto-generated method stub
-        return false;
     }
  
     public class connectAsyncTask extends AsyncTask<Void, Void, Void>{
@@ -172,16 +176,18 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 			progress.setIcon(android.R.drawable.ic_menu_myplaces);
 	        progress.show();
         }
+        
         @Override
         protected Void doInBackground(Void... params) {
             fetchData();
             return null;
         }
+        
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);            
             if(doc!=null){
-                Overlay ol = new RouteOverlay(_activity, origGeoPoint, origGeoPoint, 1);
+                Overlay ol = new RouteOverlay(taximeterActivity, origGeoPoint, origGeoPoint, 1);
                 mOverlays.add(ol);
                 NodeList _nodelist = doc.getElementsByTagName("status");
                 Node node1 = _nodelist.item(0);
@@ -251,14 +257,14 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
                         Overlay ol1 = new RouteOverlay(gp1,gp2,2,Color.BLUE);
                         mOverlays.add(ol1);
                     }
-                    Overlay ol2 = new RouteOverlay(_activity, destGeoPoint, destGeoPoint, 3);
+                    Overlay ol2 = new RouteOverlay(taximeterActivity, destGeoPoint, destGeoPoint, 3);
                     mOverlays.add(ol2);
  
                 }else{
                     // showAlert AS "Unable to find the route"
                 }
  
-                Overlay ol2 = new RouteOverlay(_activity,destGeoPoint,destGeoPoint,3);
+                Overlay ol2 = new RouteOverlay(taximeterActivity,destGeoPoint,destGeoPoint,3);
                 mOverlays.add(ol2);
 
             }else{
@@ -266,9 +272,9 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
             }
             mapView.invalidate();
             
-	        mapInfo.setText("Bandeira 1: R$ " + round(((distanceMeters/1000)*flag1)+((durationSeconds/60)*downtime)) + 
-	        		"\nBandeira 2: R$ " + round(((distanceMeters/1000)*flag2)+((durationSeconds/60)*downtime)) + 
-	        		"\nDistância: " + distance +" - Tempo Estimado: " + duration);
+	        mapInfo.setText(getString(R.string.map_taximeter_flag1) + " " + round(((distanceMeters/1000)*flag1)+((durationSeconds/60)*downtime)) + 
+	        		"\n" + getString(R.string.map_taximeter_flag2) + " " + round(((distanceMeters/1000)*flag2)+((durationSeconds/60)*downtime)) + 
+	        		"\n" + getString(R.string.map_taximeter_distance) + " " + distance + " - " + getString(R.string.map_taximeter_duration) + " " + duration);
 	        
 	        //Cancela progressDialog
 	        progress.dismiss();
@@ -290,8 +296,7 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
         
         HttpURLConnection urlConnection= null;
         URL url = null;
-        try
-        {
+        try{
             url = new URL(urlString.toString());
             urlConnection=(HttpURLConnection)url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -313,6 +318,7 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
             e.printStackTrace();
         }
     }
+    
     private List<GeoPoint> decodePoly(String encoded) {
  
         List<GeoPoint> poly = new ArrayList<GeoPoint>();
@@ -372,6 +378,7 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 		    	
 		    	origItemizedOverlay = new CustomTaximeterItemizedOverlay(this.origDrawable, TaximeterActivity.this, this.mapView);
 		    	origItemizedOverlay.addOverlay(orign);
+		    	
 		        mOverlays.add(origItemizedOverlay);
 		        
 		        List<Address> addresses = geoCoder.getFromLocation(p.getLatitudeE6()/1E6, p.getLongitudeE6()/1E6, 1);
@@ -383,7 +390,7 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 		        }
 		        Toast.makeText(TaximeterActivity.this, add, Toast.LENGTH_SHORT).show();
 	    	} catch (Exception e) {
-	    		e.printStackTrace();
+	    		Toast.makeText(TaximeterActivity.this, getString(R.string.ad_content_error_off), Toast.LENGTH_SHORT).show();
 	    	}
     	} else {
 	    	try{
@@ -398,6 +405,7 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 		    	
 		    	destItemizedOverlay = new CustomTaximeterItemizedOverlay(this.destDrawable, TaximeterActivity.this, this.mapView);
 		    	destItemizedOverlay.addOverlay(destiny);
+		    	
 		        mOverlays.add(destItemizedOverlay);
 		        
 		        List<Address> addresses = geoCoder.getFromLocation(p.getLatitudeE6()/1E6, p.getLongitudeE6()/1E6, 1);
@@ -408,8 +416,9 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 		               add += addresses.get(0).getAddressLine(i) + "\n";
 		        }
 		        Toast.makeText(TaximeterActivity.this, add, Toast.LENGTH_SHORT).show();
+		        processStatus = true;
 	    	} catch (Exception e) {
-	    		e.printStackTrace();
+	    		Toast.makeText(TaximeterActivity.this, getString(R.string.ad_content_error_off), Toast.LENGTH_SHORT).show();
 	    	}
     	}
     }
@@ -417,18 +426,9 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
     class CustomTaximeterItemizedOverlay extends ItemizedOverlay<OverlayItem> {
     	 
         private final ArrayList<OverlayItem> mapOverlays = new ArrayList<OverlayItem>();
-        
-        ProgressDialog progressDialog;
-        Handler mHandler = new Handler();
-        
-        JSONObject jObject;
-     
         private Context context;
-    	MapView mapView;
-    	
+    	private MapView mapView;
     	private Drawable marker;
-    	
-    	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
      
         public CustomTaximeterItemizedOverlay(Drawable defaultMarker, MapView mapView) {
             super(defaultMarker);
@@ -458,6 +458,11 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
         		}
             }
         });
+        
+        public void addOverlay(OverlayItem overlay) {
+            mapOverlays.add(overlay);
+            this.populate();
+        }
      
         @Override
         protected OverlayItem createItem(int i) {
@@ -468,11 +473,6 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
         public int size() {
             return mapOverlays.size();
         }
-     
-        public void addOverlay(OverlayItem overlay) {
-            mapOverlays.add(overlay);
-            this.populate();
-        }
         
         @Override
         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
@@ -480,31 +480,33 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
 	        boundCenterBottom(marker);
         }
     }
+    
+    @Override
+    protected boolean isRouteDisplayed() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
 	@Override
 	public void onLocationChanged(Location arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void onProviderDisabled(String arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void onProviderEnabled(String arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 
 	@Override
 	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
 		// TODO Auto-generated method stub
-		
 	}
 }

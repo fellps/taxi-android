@@ -7,6 +7,7 @@
     <!-- AlertDialog -->
     
     <string name="ad_title_error">Ocorreu um erro!</string>
+    <string name="ad_title_alert">Atenção!</string>
     <string name="ad_content_error_off">O servidor não está disponível.</string>
     <string name="ad_content_error_unexpected">Aconteceu um erro inesperado na aplicação.</string>
     <string name="ad_button_positive">OK</string>
@@ -102,10 +103,15 @@
 	<string name="map_taximeter_next">Prosseguir</string>
 	<string name="map_taximeter_finish">Finalizar</string>
 	<string name="map_taximeter_restart">Reiniciar</string>
+	<string name="map_taximeter_error_marker">Escolha o seu destino antes de prosseguir!</string>
+	<string name="map_taximeter_flag1">Bandeira 1: R$</string>
+	<string name="map_taximeter_flag2">Bandeira 2: R$</string>
+	<string name="map_taximeter_distance">Distância:</string>
+	<string name="map_taximeter_duration">Tempo Estimado:</string>
 	
 	<!-- Records -->
 	
-	<string name="rec_"></string>
+	<string name="rec_title_info">Histórico de solicitações</string>
 	
 	<!-- Register -->
 	

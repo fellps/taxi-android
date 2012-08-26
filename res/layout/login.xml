@@ -1,98 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/background"
-    android:orientation="vertical" >
+    android:background="@drawable/background" >
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="fill_parent"
-        android:layout_height="150dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/login_logo" />
-
-    <TextView
-        android:id="@+id/tv_email"
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/logo"
-        android:layout_marginLeft="30dip"
-        android:text="@string/register_email"
-        android:textColor="#000" />
+        android:orientation="vertical" >
 
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="270dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_email"
-        android:layout_marginLeft="25dip"
-        android:inputType="text" />
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/login_logo" />
 
-    <TextView
-        android:id="@+id/tv_pw"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/et_email"
-        android:layout_marginLeft="30dip"
-        android:text="@string/register_pw"
-        android:textColor="#000" />
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/logo"
+            android:layout_marginLeft="30dip"
+            android:text="@string/register_email"
+            android:textColor="#000" />
 
-    <EditText
-        android:id="@+id/et_pw"
-        android:layout_width="270dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_pw"
-        android:layout_marginLeft="25dip"
-        android:inputType="textPassword" />
-    
-    <CheckBox
-        android:id="@+id/cb_remember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/et_pw"
-        android:layout_marginLeft="25dip"
-        android:text="@string/login_remember"
-        android:textColor="#000" />
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="270dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_email"
+            android:layout_marginLeft="25dip"
+            android:inputType="text" />
 
-    <TextView
-        android:id="@+id/tv_error"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/cb_remember"
-        android:gravity="center"
-        android:padding="10dip"
-        android:textColor="#F7D62F" />
+        <TextView
+            android:id="@+id/tv_pw"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/et_email"
+            android:layout_marginLeft="30dip"
+            android:text="@string/register_pw"
+            android:textColor="#000" />
 
-    <Button
-        android:id="@+id/bt_login"
-        android:layout_width="260dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tv_error"
-        android:layout_marginLeft="30dip"
-        android:background="#FFD700"
-        android:padding="10dip"
-        android:text="@string/login_button_enter"
-        android:textColor="#222"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/et_pw"
+            android:layout_width="270dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_pw"
+            android:layout_marginLeft="25dip"
+            android:inputType="textPassword" />
 
-    <ImageButton
-        android:id="@+id/ib_help"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bt_login"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/register_button"
-        android:src="@drawable/register_info" />
+        <CheckBox
+            android:id="@+id/cb_remember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/et_pw"
+            android:layout_marginLeft="25dip"
+            android:text="@string/login_remember"
+            android:textColor="#000" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/cb_remember"
+            android:gravity="center"
+            android:padding="10dip"
+            android:textColor="#F7D62F" />
+
+        <Button
+            android:id="@+id/bt_login"
+            android:layout_width="260dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_error"
+            android:layout_marginLeft="30dip"
+            android:background="#FFD700"
+            android:padding="10dip"
+            android:text="@string/login_button_enter"
+            android:textColor="#222"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ib_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bt_login"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/register_button"
+            android:src="@drawable/register_info" />
+    </RelativeLayout>
+
+</ScrollView>

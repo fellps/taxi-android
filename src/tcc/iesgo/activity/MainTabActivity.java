@@ -61,14 +61,14 @@ public class MainTabActivity extends TabActivity {
 		tabHost = getTabHost();
 		TabHost.TabSpec spec;
 		
-		Intent intentAndroid = new Intent().setClass(this, ClientMapActivity.class);
+		Intent intentAndroid = new Intent().setClass(this, ClientMapActivity.class);//Mapa
 		spec = tabHost
 				.newTabSpec(getString(R.string.menu_map))
 				.setIndicator(getString(R.string.menu_map), res.getDrawable(R.layout.tab_icon_map))
 				.setContent(intentAndroid);
 		tabHost.addTab(spec);
 
-		intentAndroid = new Intent().setClass(this, RecordsActivity.class);
+		intentAndroid = new Intent().setClass(this, TabGroupRecordsActivity.class);//Histórico
 		spec = tabHost
 			.newTabSpec(getString(R.string.menu_records))
 			.setIndicator(getString(R.string.menu_records), res.getDrawable(R.layout.tab_icon_records))
@@ -76,7 +76,7 @@ public class MainTabActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		
-		intentAndroid = new Intent().setClass(this, FavoritesActivity.class);
+		intentAndroid = new Intent().setClass(this, FavoritesActivity.class);//Favoritos
 		spec = tabHost
 			.newTabSpec(getString(R.string.menu_favorites))
 			.setIndicator(getString(R.string.menu_favorites), res.getDrawable(R.layout.tab_icon_favorites))
@@ -84,7 +84,7 @@ public class MainTabActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		
-		intentAndroid = new Intent().setClass(this, TaximeterActivity.class);
+		intentAndroid = new Intent().setClass(this, TaximeterActivity.class);//Taxímetro
 		spec = tabHost
 			.newTabSpec(getString(R.string.menu_taximeter))
 			.setIndicator(getString(R.string.menu_taximeter), res.getDrawable(R.layout.tab_icon_taximeter))

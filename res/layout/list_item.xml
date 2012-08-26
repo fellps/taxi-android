@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/cabecalho"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/background_map_top"
+        android:orientation="horizontal"
+        android:padding="5dip" >
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:textColor="#FFF"
+            android:textSize="16dp" 
+            android:text="@string/rec_title_info"/>
+
+        <Button
+            android:id="@+id/btnVoltar"
+            android:layout_width="fill_parent"
+            android:layout_height="34dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/title"
+            android:background="@drawable/button_refresh"
+            android:gravity="center|center_vertical" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/cabecalho"
+        android:background="#ffffff"
+        android:cacheColorHint="#00000000"
+        android:dividerHeight="1sp" />
+
+</RelativeLayout>
