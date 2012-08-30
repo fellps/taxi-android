@@ -32,6 +32,7 @@
     <string name="url_update_user_location">updateuserloc/</string>
     <string name="url_get_taxis">gettaxis/</string>
     <string name="url_request_taxi">requesttaxi/</string>
+    <string name="url_records">getrecords/</string>
     <string name="url_help">http://www.google.com.br</string>
     
 	<string name="form_id">user_login</string>
@@ -40,6 +41,7 @@
 	<string name="form_id_update_loc">user_update_loc</string>
 	<string name="form_id_get_taxis">user_get_taxis</string>
 	<string name="form_id_request_taxi">request_taxi</string>
+	<string name="form_id_records">get_records</string>
 	
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>

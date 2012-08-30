@@ -34,6 +34,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -71,6 +72,8 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
     private float flag1 = 1.80f;
     private float flag2 = 2.34f;
     private float downtime = 0.41f;
+    
+    private Vibrator vibrator;
     
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,8 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
         
         mapInfo = (TextView)  findViewById(R.id.map_info_taximeter);
         btAction = (Button) findViewById(R.id.bt_action);
+        
+        vibrator = (Vibrator) TaximeterActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
         
         btAction.setOnClickListener(new View.OnClickListener() {
 			//Verifica se todos os campos foram preenchidos corretamente
@@ -367,8 +372,11 @@ public class TaximeterActivity extends MapActivity implements LocationListener{
     }
     
     private void addOverlayMap(GeoPoint p, Geocoder geoCoder){
+    	vibrator.vibrate(100);  
+    	
     	if(!process){
 	    	try{
+	    		
 	    		this.origGeoPoint = p;
 	    		
 				mapView.getOverlays().remove(0);

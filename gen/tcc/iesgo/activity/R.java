@@ -66,7 +66,7 @@ public final class R {
         public static final int bt_login=0x7f070014;
         public static final int bt_next=0x7f070026;
         public static final int bt_register=0x7f070018;
-        public static final int btnVoltar=0x7f070009;
+        public static final int button_refresh=0x7f070009;
         public static final int cabecalho=0x7f070007;
         public static final int cb_remember=0x7f070012;
         public static final int et_email=0x7f07000f;
@@ -139,123 +139,125 @@ public final class R {
  Balloon 
          */
         public static final int balloon_item_title=0x7f04000a;
-        public static final int cm_ad_request_taxi_content=0x7f040027;
-        public static final int cm_ad_request_taxi_content_sucess=0x7f040028;
-        public static final int cm_ad_request_taxi_title_error=0x7f040026;
-        public static final int cm_ad_request_taxi_title_no_sucess=0x7f040024;
-        public static final int cm_ad_request_taxi_title_sucess=0x7f040023;
-        public static final int cm_ad_response_taxi_no_success=0x7f040029;
+        public static final int cm_ad_request_taxi_content=0x7f040029;
+        public static final int cm_ad_request_taxi_content_sucess=0x7f04002a;
+        public static final int cm_ad_request_taxi_title_error=0x7f040028;
+        public static final int cm_ad_request_taxi_title_no_sucess=0x7f040026;
+        public static final int cm_ad_request_taxi_title_sucess=0x7f040025;
+        public static final int cm_ad_response_taxi_no_success=0x7f04002b;
         /**  ClientMap 
  ClientMap 
          */
-        public static final int cm_error_json=0x7f04001f;
-        public static final int cm_error_request_taxi=0x7f04002a;
-        public static final int cm_pd_request_msg=0x7f040020;
-        public static final int cm_pd_request_taxi_title_sucess=0x7f040025;
-        public static final int cm_pd_wait_request=0x7f040021;
-        public static final int cm_pd_wait_request_seconds=0x7f040022;
+        public static final int cm_error_json=0x7f040021;
+        public static final int cm_error_request_taxi=0x7f04002c;
+        public static final int cm_pd_request_msg=0x7f040022;
+        public static final int cm_pd_request_taxi_title_sucess=0x7f040027;
+        public static final int cm_pd_wait_request=0x7f040023;
+        public static final int cm_pd_wait_request_seconds=0x7f040024;
         public static final int description=0x7f040001;
         /**  Favorites 
  Favorites 
          */
-        public static final int fav_=0x7f04002b;
-        public static final int form_id=0x7f040017;
-        public static final int form_id_get_taxis=0x7f04001b;
-        public static final int form_id_login=0x7f040018;
-        public static final int form_id_new=0x7f040019;
-        public static final int form_id_request_taxi=0x7f04001c;
-        public static final int form_id_update_loc=0x7f04001a;
+        public static final int fav_=0x7f04002d;
+        public static final int form_id=0x7f040018;
+        public static final int form_id_get_taxis=0x7f04001c;
+        public static final int form_id_login=0x7f040019;
+        public static final int form_id_new=0x7f04001a;
+        public static final int form_id_records=0x7f04001e;
+        public static final int form_id_request_taxi=0x7f04001d;
+        public static final int form_id_update_loc=0x7f04001b;
         /**  Gps 
  Gps 
          */
-        public static final int gps_disabled=0x7f04002c;
-        public static final int gps_disabled_message=0x7f04002d;
-        public static final int login_button_enter=0x7f04002f;
-        public static final int login_email_description=0x7f040030;
-        public static final int login_error_authentication=0x7f040031;
-        public static final int login_error_connection=0x7f040032;
-        public static final int login_name=0x7f04001d;
-        public static final int login_pass=0x7f04001e;
+        public static final int gps_disabled=0x7f04002e;
+        public static final int gps_disabled_message=0x7f04002f;
+        public static final int login_button_enter=0x7f040031;
+        public static final int login_email_description=0x7f040032;
+        public static final int login_error_authentication=0x7f040033;
+        public static final int login_error_connection=0x7f040034;
+        public static final int login_name=0x7f04001f;
+        public static final int login_pass=0x7f040020;
         /**  Login 
  Login 
          */
-        public static final int login_remember=0x7f04002e;
-        public static final int main_button_exit=0x7f040035;
-        public static final int main_button_login=0x7f040034;
+        public static final int login_remember=0x7f040030;
+        public static final int main_button_exit=0x7f040037;
+        public static final int main_button_login=0x7f040036;
         /**  Main 
  Main 
          */
-        public static final int main_welcome=0x7f040033;
-        public static final int map_pd_update_map=0x7f040037;
+        public static final int main_welcome=0x7f040035;
+        public static final int map_pd_update_map=0x7f040039;
         /**  Map 
  Map 
          */
-        public static final int map_search_point=0x7f040036;
-        public static final int map_taximeter_distance=0x7f040046;
-        public static final int map_taximeter_duration=0x7f040047;
-        public static final int map_taximeter_error_marker=0x7f040043;
-        public static final int map_taximeter_finish=0x7f040041;
-        public static final int map_taximeter_flag1=0x7f040044;
-        public static final int map_taximeter_flag2=0x7f040045;
+        public static final int map_search_point=0x7f040038;
+        public static final int map_taximeter_distance=0x7f040048;
+        public static final int map_taximeter_duration=0x7f040049;
+        public static final int map_taximeter_error_marker=0x7f040045;
+        public static final int map_taximeter_finish=0x7f040043;
+        public static final int map_taximeter_flag1=0x7f040046;
+        public static final int map_taximeter_flag2=0x7f040047;
         /**  Taximeter 
  Taximeter 
          */
-        public static final int map_taximeter_info=0x7f04003e;
-        public static final int map_taximeter_info_next=0x7f04003f;
-        public static final int map_taximeter_next=0x7f040040;
-        public static final int map_taximeter_restart=0x7f040042;
-        public static final int menu_config=0x7f04003c;
-        public static final int menu_exit=0x7f04003d;
-        public static final int menu_favorites=0x7f04003a;
+        public static final int map_taximeter_info=0x7f040040;
+        public static final int map_taximeter_info_next=0x7f040041;
+        public static final int map_taximeter_next=0x7f040042;
+        public static final int map_taximeter_restart=0x7f040044;
+        public static final int menu_config=0x7f04003e;
+        public static final int menu_exit=0x7f04003f;
+        public static final int menu_favorites=0x7f04003c;
         /**  TabHost 
  TabHost 
          */
-        public static final int menu_map=0x7f040038;
-        public static final int menu_records=0x7f040039;
-        public static final int menu_taximeter=0x7f04003b;
-        public static final int pd_content_loading=0x7f040061;
-        public static final int pd_content_login=0x7f040060;
-        public static final int pd_content_register=0x7f04005f;
+        public static final int menu_map=0x7f04003a;
+        public static final int menu_records=0x7f04003b;
+        public static final int menu_taximeter=0x7f04003d;
+        public static final int pd_content_loading=0x7f040063;
+        public static final int pd_content_login=0x7f040062;
+        public static final int pd_content_register=0x7f040061;
         /**  ProgressDialog 
  ProgressDialog 
          */
-        public static final int pd_title=0x7f04005e;
+        public static final int pd_title=0x7f040060;
         /**  Presentation 
  Presentation 
          */
-        public static final int present_=0x7f04005d;
+        public static final int present_=0x7f04005f;
         /**  Records 
  Records 
          */
-        public static final int rec_title_info=0x7f040048;
-        public static final int register_button=0x7f040050;
-        public static final int register_button_next=0x7f040055;
-        public static final int register_continue_info_content=0x7f040054;
-        public static final int register_continue_info_title=0x7f040053;
-        public static final int register_email=0x7f04004b;
-        public static final int register_email_description=0x7f04004c;
-        public static final int register_error_duplicate=0x7f04005c;
-        public static final int register_error_email=0x7f040057;
-        public static final int register_error_name=0x7f040056;
-        public static final int register_error_off=0x7f04005a;
-        public static final int register_error_param=0x7f04005b;
-        public static final int register_error_phone=0x7f040058;
-        public static final int register_error_pw=0x7f040059;
-        public static final int register_lang=0x7f040051;
+        public static final int rec_title_info=0x7f04004a;
+        public static final int register_button=0x7f040052;
+        public static final int register_button_next=0x7f040057;
+        public static final int register_continue_info_content=0x7f040056;
+        public static final int register_continue_info_title=0x7f040055;
+        public static final int register_email=0x7f04004d;
+        public static final int register_email_description=0x7f04004e;
+        public static final int register_error_duplicate=0x7f04005e;
+        public static final int register_error_email=0x7f040059;
+        public static final int register_error_name=0x7f040058;
+        public static final int register_error_off=0x7f04005c;
+        public static final int register_error_param=0x7f04005d;
+        public static final int register_error_phone=0x7f04005a;
+        public static final int register_error_pw=0x7f04005b;
+        public static final int register_lang=0x7f040053;
         /**  Register 
  Register 
          */
-        public static final int register_name=0x7f040049;
-        public static final int register_name_description=0x7f04004a;
-        public static final int register_phone=0x7f04004d;
-        public static final int register_phone_description=0x7f04004e;
-        public static final int register_pw=0x7f04004f;
-        public static final int spinner_lang=0x7f040052;
+        public static final int register_name=0x7f04004b;
+        public static final int register_name_description=0x7f04004c;
+        public static final int register_phone=0x7f04004f;
+        public static final int register_phone_description=0x7f040050;
+        public static final int register_pw=0x7f040051;
+        public static final int spinner_lang=0x7f040054;
         public static final int url_authentication=0x7f040010;
         public static final int url_create_user=0x7f040012;
         public static final int url_get_taxis=0x7f040014;
-        public static final int url_help=0x7f040016;
+        public static final int url_help=0x7f040017;
         public static final int url_login_user=0x7f040011;
+        public static final int url_records=0x7f040016;
         public static final int url_request_taxi=0x7f040015;
         public static final int url_update_user_location=0x7f040013;
         /**  Configuração do Web Service 

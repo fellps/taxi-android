@@ -24,7 +24,7 @@
             android:text="@string/rec_title_info"/>
 
         <Button
-            android:id="@+id/btnVoltar"
+            android:id="@+id/button_refresh"
             android:layout_width="fill_parent"
             android:layout_height="34dp"
             android:layout_centerVertical="true"

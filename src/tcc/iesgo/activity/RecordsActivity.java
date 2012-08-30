@@ -5,74 +5,110 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ListActivity;
-import android.app.ProgressDialog;
+import android.app.ProgressDialog;	
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 import tcc.iesgo.activity.R;
+import tcc.iesgo.http.connection.HttpClientFactory;
 
 public class RecordsActivity extends ListActivity implements LocationListener {
 
 	LocationManager lm;
-	HttpClient hc = new DefaultHttpClient();
+	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
 	Button btnVoltar;
 	ProgressDialog progressDialog;
 	Handler mHandler = new Handler();
 	DecimalFormat formattedDist = new DecimalFormat("#.#");
-	String pontos;
 	HttpPost post;
+	BaseAdapter adapter;
+	
+	Button btnRefresh;
+	
+	private String data[];
+	
+	private JSONObject jObject;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list_item);
-		// Obtem uma instacia do servico de gerenciador de localizacao
+		
+		btnRefresh = (Button) findViewById(R.id.button_refresh);
 		
 		init();
-	}
+		
+		btnRefresh.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				adapter.notifyDataSetChanged();
+			}
+		});
+	}	
 	
 	public void init() {
-		// Seta a nova lista
-		// Cria uma lista com os dados informados
-		ArrayList<Map<String, String>> list = buildData(pontos);
+		//Histórico de solicitações
+		String records = getRecords();
 
-		String[] hashmap = { "nome", "distancia", "ponto_id" };
+		//Cria uma lista com os dados informados
+		ArrayList<Map<String, String>> list = buildData(records);
+
+		String[] hashmap = { "name", "date", "id_taxista" };
 		int[] campos = { R.id.text1, R.id.text2 };
 
-		SimpleAdapter adapter = new SimpleAdapter(RecordsActivity.this, list,
+		adapter = new SimpleAdapter(RecordsActivity.this, list,
 				R.layout.list_style, hashmap, campos);
-
+		
 		setListAdapter(adapter);
 	}
 
 	//Cria um ArrayList a partir da string informada
-	private ArrayList<Map<String, String>> buildData(String pontos) {
+	private ArrayList<Map<String, String>> buildData(String records) {
 		ArrayList<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		
-		list.add(putData("João Pedro dos Santos","22/08/2012", "5"));
-		list.add(putData("José Gomes da Costa","26/08/2012", "1"));
-		
+		try {
+			String[] taxiId = new String[getJsonResult(records, "id").length];
+			taxiId = getJsonResult(records, "id");
+			String[] name = new String[getJsonResult(records, "name").length];
+			name = getJsonResult(records, "name");
+			String[] date = new String[getJsonResult(records, "date").length];
+			date = getJsonResult(records, "date");
+			
+			for(int i=0;i<name.length;i++){
+				list.add(putData(name[i],date[i],taxiId[i]));
+			}
+
+		} catch (JSONException e) {
+			Toast.makeText(RecordsActivity.this, getString(R.string.register_error_off), Toast.LENGTH_SHORT).show();
+		}
+
 		return list;
 	}
 
 	// Retorna um HashMap a partir dos dados informados na lista
-	private HashMap<String, String> putData(String nome, String distancia, String id) {
+	private HashMap<String, String> putData(String name, String date, String id) {
 		HashMap<String, String> item = new HashMap<String, String>();
-		item.put("nome", nome);
-		item.put("distancia", distancia);
-		item.put("ponto_id", id);
+		item.put("name", name);
+		item.put("date", date);
+		item.put("id_taxista", id);
 		return item;
 	}
 
@@ -81,8 +117,34 @@ public class RecordsActivity extends ListActivity implements LocationListener {
 		super.onListItemClick(l, v, position, id);
 		// Objetos na lista
 	}
-
 	
+	private String getRecords(){
+		String status = "";
+		try {
+			HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_records) +  getString(R.string.form_id_records));
+			
+			HttpResponse response = httpclient.execute(httppost);
+			
+			status = EntityUtils.toString(response.getEntity());
+		
+		} catch (Exception e) {
+			Toast.makeText(RecordsActivity.this, getString(R.string.register_error_off), Toast.LENGTH_SHORT).show();
+		}
+		
+		return status;
+	}
+	
+	private String[] getJsonResult(String response, String option) throws JSONException{
+		jObject = new JSONObject(response);
+		JSONArray jArray = jObject.getJSONArray("records");
+		data = new String[jArray.length()];
+		for(int i=0;i<jArray.length();i++){
+			this.data[i] = jArray.getJSONObject(i)
+					.getString(option).toString();
+		}
+		return this.data;
+	}
+
 	@Override
 	public void onBackPressed() {
 		finish();
