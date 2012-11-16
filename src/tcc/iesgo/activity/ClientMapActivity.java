@@ -6,6 +6,7 @@ import tcc.iesgo.overlay.MyCustomLocationOverlay;
 import tcc.iesgo.http.connection.HttpClientFactory;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -14,7 +15,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -65,6 +68,9 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 	private int minLatitude, maxLatitude, minLongitude, maxLongitude;
 
 	private String result;
+	private String data[];
+	
+	private JSONObject jObject;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,48 +142,71 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		maxLatitude = Integer.MIN_VALUE;
 		minLongitude = Integer.MAX_VALUE;
 		maxLongitude = Integer.MIN_VALUE;
-		
-		//result = getJsonResult(getTaxis(location), "result"); //Json
-		
+
 		//Rotina p/ atualizar os objetos do mapa
 		Overlay obj = mapOverlays.get(0); //Posição atual do usuário
 		mapOverlays.clear(); //Limpa Overlays do mapa
 		mapOverlays.add(obj); //Adiciona o usuario no mapa
 		mapView.invalidate(); //Atualiza o mapa
 		//Fim rotina
-		
+
 		//GeoPoint da posição atual do usuário
 		geoActual = new GeoPoint((int) (location.getLatitude() * 1E6), (int) (location.getLongitude() * 1E6));
+
+		String taxis = getTaxis(location); //Json
+
+		int length = getJsonResult(taxis, "id").length;
+		String[] ids = new String[length];
+		ids = getJsonResult(taxis, "id");
+		String[] distances = new String[length];
+		distances = getJsonResult(taxis, "distance");
+		String[] latitudes = new String[length];
+		latitudes = getJsonResult(taxis, "latitude");
+		String[] longitudes = new String[length];
+		longitudes = getJsonResult(taxis, "longitude");
+		String[] names = new String[length];
+		names = getJsonResult(taxis, "name");
+		String[] vehicles = new String[length];
+		vehicles = getJsonResult(taxis, "vehicle");
+		String[] plaques = new String[length];
+		plaques = getJsonResult(taxis, "plaque");
+		String[] licenses = new String[length];
+		licenses = getJsonResult(taxis, "license");
+		String[] langs =new String[length];
+		langs = getJsonResult(taxis, "lang");
 		
-		/** TODO: Fazer rotina para inserir dinâmicamente os táxis no mapa. */
+		DecimalFormat conv = new DecimalFormat("0.00");
 		
-		double lat = -15.543997;
-		double lng = -47.328652;
-		//GeoPoint da posição atual do taxista
-		geoTaxi = new GeoPoint((int) (lat * 1E6),(int) (lng * 1E6));
+		for(int i=0;i<length;i++){
+
+			String[] languages = langs[i].split(",");
+			String lang = "";
+			for(int j=0;j<languages.length;j++){
+
+				if(languages[j].equals("pt")){
+					lang += "Português";
+				} else if(languages[j].equals("en")){
+					lang += ", Inglês";
+				} else if(languages[j].equals("es")){
+					lang += ", Espanhol";
+				}
+			}
 			
-		overlayitem = new OverlayItem(geoTaxi, "RG: 1 - João Pedro dos Santos", "Descrição:\nDistância: 1,1 km\nVeículo: Corsa Sedan\nPlaca: ABC-1234\nLicença nº: 00112-X\nIdiomas Conhecidos: Português, Inglês\n");
-		
-		itemizedOverlay = new CustomItemizedOverlay(dTaxi, ClientMapActivity.this, mapView);
-		
-		itemizedOverlay.addOverlay(overlayitem);
-		
-		mapOverlays.add(itemizedOverlay);
-		
-		lat = -15.553997;
-		lng = -47.328652;
-		//GeoPoint da posição atual do taxista
-		geoTaxi = new GeoPoint((int) (lat * 1E6),(int) (lng * 1E6));
+			double lat = Double.parseDouble(latitudes[i]);
+			double lng = Double.parseDouble(longitudes[i]);
+
+			//GeoPoint da posição atual do taxista
+			geoTaxi = new GeoPoint((int) (lat * 1E6),(int) (lng * 1E6));
 			
-		overlayitem = new OverlayItem(geoTaxi, "RG: 05 - José Gomes da Costa", "Descrição:\nDistância: 300 metros\nVeículo: Fiat Palio\nPlaca: CBA-4321\nLicença nº: 00219-X\nIdiomas Conhecidos: Português\n");
-		
-		itemizedOverlay = new CustomItemizedOverlay(dTaxi, ClientMapActivity.this, mapView);
-		
-		itemizedOverlay.addOverlay(overlayitem);
-		
-		mapOverlays.add(itemizedOverlay);
-		
-		/** TODO: Fim da rotina */
+			overlayitem = new OverlayItem(geoTaxi, "RG: "+ids[i]+" - "+names[i], "Descrição:\nDistância: "+conv.format(Double.parseDouble(distances[i])/1000)+
+					" km\nVeículo: "+vehicles[i]+"\nPlaca: "+plaques[i]+"\nLicença nº: "+licenses[i]+"\nIdiomas Conhecidos: "+lang+"\n");
+			
+			itemizedOverlay = new CustomItemizedOverlay(dTaxi, getParent(), mapView);
+			
+			itemizedOverlay.addOverlay(overlayitem);
+			
+			mapOverlays.add(itemizedOverlay);
+		}
 		
 		//Localização atual do usuário
 		myLocationOverlay = new MyCustomLocationOverlay(ClientMapActivity.this,mapView);
@@ -185,7 +214,7 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		myLocationOverlay.enableMyLocation();
 		//Habilita atualizacoes do sensor
 		myLocationOverlay.enableCompass();
-		
+
 		//Adiciona o overlay no mapa
 		mapOverlays.add(myLocationOverlay);
 		
@@ -207,14 +236,14 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
         Integer zoomlevel2 = zoomlevel - 1;
         mc.setZoom(zoomlevel2);
         //Fim rotina
-		
+
 		try {
 			updateClientLocation(location); //Atualiza a posição do cliente
 		} catch (Exception e) {
 			Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
 		}
-		
-		mapInfo.setText("Quantidade de táxis encontrados próximo a você: 2");
+
+		mapInfo.setText("O táxi mais próximo de você está a: "+conv.format(Double.parseDouble(distances[0])/1000)+ " km");
 	}
 	
 	//Busca os táxis próximos a posicao informada
@@ -222,14 +251,15 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		if (location != null) {
 			try {
 				HttpPost post = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_get_taxis) 
-					+ location.getLatitude() + "/" + location.getLongitude() + "/" + getString(R.string.form_id_get_taxis));
+						+ location.getLatitude() + "/" + location.getLongitude() + "/" + getString(R.string.form_id_get_taxis));
 				
 				HttpResponse rp = httpclient.execute(post);
 			
 				if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
 					this.result = EntityUtils.toString(rp.getEntity());
-			} catch (IOException e) {
+			} catch (Exception e) {
 				Toast.makeText(ClientMapActivity.this, getString(R.string.login_error_connection), Toast.LENGTH_SHORT).show();
+				e.printStackTrace();
 			}
 		}
 		return this.result;
@@ -241,9 +271,20 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 			
 			HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_update_user_location)
 					+ location.getLatitude() + "/" + location.getLongitude() + "/" + getString(R.string.form_id_update_loc));
-			
+
 			httpclient.execute(httppost);
 		}
+	}
+	
+	private String[] getJsonResult(String response, String option) throws JSONException{
+		jObject = new JSONObject(response);
+		JSONArray jArray = jObject.getJSONArray("taxis");
+		data = new String[jArray.length()];
+		for(int i=0;i<jArray.length();i++){
+			this.data[i] = jArray.getJSONObject(i)
+					.getString(option).toString();
+		}
+		return this.data;
 	}
 	
 	//Chamado quando o GPS esta desativado (abre as conf. do GPS)
@@ -323,6 +364,6 @@ public class ClientMapActivity extends MapActivity implements LocationListener {
 		super.onStop();
 		PendingIntent origPendingIntent = PendingIntent.getBroadcast(getBaseContext(),0, getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
 		lm.removeUpdates(origPendingIntent);
-		System.exit(0);
+		//System.exit(0);
 	}
 }

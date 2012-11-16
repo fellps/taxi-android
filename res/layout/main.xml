@@ -41,7 +41,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/bt_register"
+            android:id="@+id/bt_register_client"
             android:layout_width="260dip"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/bt_login"
@@ -49,7 +49,20 @@
             android:layout_marginTop="34dp"
             android:background="#FFD700"
             android:padding="10dip"
-            android:text="@string/register_button"
+            android:text="@string/register_button_client"
+            android:textColor="#222"
+            android:textStyle="bold" />
+        
+        <Button
+            android:id="@+id/bt_register_taxi"
+            android:layout_width="260dip"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/bt_login"
+            android:layout_below="@+id/bt_register_client"
+            android:layout_marginTop="34dp"
+            android:background="#FFD700"
+            android:padding="10dip"
+            android:text="@string/register_button_taxi"
             android:textColor="#222"
             android:textStyle="bold" />
 
@@ -57,7 +70,7 @@
             android:id="@+id/bt_exit"
             android:layout_width="260dip"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/bt_register"
+            android:layout_below="@+id/bt_register_taxi"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="28dp"
             android:background="#FFD700"

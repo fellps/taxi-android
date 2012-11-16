@@ -29,7 +29,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import tcc.iesgo.activity.RegisterActivity;
+import tcc.iesgo.activity.RegisterClientActivity;
 import tcc.iesgo.http.connection.HttpClientFactory;
 import tcc.iesgo.persistence.SQLiteAdapter;
 
@@ -47,7 +47,7 @@ public class LoginActivity extends Activity {
 	
 	HttpClient httpclient = HttpClientFactory.getThreadSafeClient();
 	
-	RegisterActivity register = new RegisterActivity();
+	RegisterClientActivity register = new RegisterClientActivity();
 	
 	private JSONObject jObject;
 	

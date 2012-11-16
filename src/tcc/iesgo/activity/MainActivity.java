@@ -10,7 +10,8 @@ import android.widget.ImageButton;
 public class MainActivity extends Activity {
 	
 	Button btnLogin;
-	Button btnRegister;
+	Button btnRegisterClient;
+	Button btnRegisterTaxi;
 	Button btnExit;
 	ImageButton btnHelp;
 	
@@ -21,7 +22,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.main); //Layout da Activity
 		
 		btnLogin = (Button) findViewById(R.id.bt_login);
-		btnRegister = (Button) findViewById(R.id.bt_register);
+		btnRegisterClient = (Button) findViewById(R.id.bt_register_client);
+		btnRegisterTaxi = (Button) findViewById(R.id.bt_register_taxi);
 		btnExit = (Button) findViewById(R.id.bt_exit);
 		btnHelp = (ImageButton) findViewById(R.id.ib_help);
 		
@@ -33,10 +35,18 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		btnRegister.setOnClickListener(new View.OnClickListener() {
+		btnRegisterClient.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+				Intent i = new Intent(getApplicationContext(), RegisterClientActivity.class);
+				startActivity(i);
+			}
+		});
+		
+		btnRegisterTaxi.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent i = new Intent(getApplicationContext(), RegisterTaxiActivity.class);
 				startActivity(i);
 			}
 		});

@@ -32,7 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RegisterActivity extends Activity {
+public class RegisterClientActivity extends Activity {
 	
 	Spinner language;
 	EditText inputName;
@@ -72,7 +72,7 @@ public class RegisterActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.register); //Layout da Activity
+		setContentView(R.layout.register_client); //Layout da Activity
 
 		//Instância dos componentes do layout
 		language = (Spinner) findViewById(R.id.sp_lang);
@@ -188,7 +188,7 @@ public class RegisterActivity extends Activity {
 	
 	public void register(final String[] data) {
 		
-		progressDialog = ProgressDialog.show(RegisterActivity.this, 
+		progressDialog = ProgressDialog.show(RegisterClientActivity.this, 
 				getString(R.string.pd_title), getString(R.string.pd_content_register));
 		progressDialog.setIcon(R.drawable.progress_dialog);
 		
@@ -196,13 +196,12 @@ public class RegisterActivity extends Activity {
 			@Override
 			public void run() {
 				try {
-
 					HttpPost httppost = new HttpPost(getString(R.string.url_webservice) + getString(R.string.url_create_user)
 							+ data[0].replace(" ", "%20") + "/" + data[1] + "/" + data[2] + "/" + data[3] + "/" + data[4] + "/" + getString(R.string.form_id_new));
 
 						//Salva usuário na nuvem
 						HttpResponse rp = httpclient.execute(httppost);
-						
+
 						String response = "0";
 
 						if (rp.getStatusLine().getStatusCode() == HttpStatus.SC_OK)
@@ -214,16 +213,16 @@ public class RegisterActivity extends Activity {
 							//Salva usuário no DB do Aplicativo
 							//mySQLiteAdapter = new SQLiteAdapter(getApplicationContext());
 							//mySQLiteAdapter.openToWrite();
-							//mySQLiteAdapter.insert(data[0], data[4], lang);
+							//mySQLiteAdapter.insert(data[1], data[3], lang);
 							//mySQLiteAdapter.close();
 							
 							//Abre o mapa
-							gotoContinueInfo(data[0], data[4]);
+							gotoContinueInfo(data[1], data[3]);
 						} else if(result.equals("2")){
 							mHandler.post(new Runnable() {
 								@Override
 								public void run() {
-									Toast.makeText(RegisterActivity.this, getString(R.string.register_error_duplicate), Toast.LENGTH_SHORT).show();
+									Toast.makeText(RegisterClientActivity.this, getString(R.string.register_error_duplicate), Toast.LENGTH_SHORT).show();
 									registerErrorMsg.setText(getString(R.string.register_error_duplicate));
 								}
 							});
@@ -231,7 +230,7 @@ public class RegisterActivity extends Activity {
 							mHandler.post(new Runnable() {
 								@Override
 								public void run() {
-									Toast.makeText(RegisterActivity.this, getString(R.string.register_error_param), Toast.LENGTH_SHORT).show();
+									Toast.makeText(RegisterClientActivity.this, getString(R.string.register_error_param), Toast.LENGTH_SHORT).show();
 									registerErrorMsg.setText(getString(R.string.register_error_param));
 								}
 							});
@@ -252,12 +251,12 @@ public class RegisterActivity extends Activity {
 	}
 	
 	private void gotoHome() {
-		Intent i = new Intent(RegisterActivity.this, MainActivity.class);
+		Intent i = new Intent(RegisterClientActivity.this, MainActivity.class);
 		startActivity(i);
 	}
 	
 	private void gotoContinueInfo(String email, String password) {
-		Intent i = new Intent(RegisterActivity.this, RegisterContinueActivity.class);
+		Intent i = new Intent(RegisterClientActivity.this, RegisterContinueActivity.class);
 		i.putExtra("email", email);
 		i.putExtra("pass", password);
 		startActivity(i);
@@ -285,6 +284,6 @@ public class RegisterActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-		RegisterActivity.this.finish();
+		RegisterClientActivity.this.finish();
 	}
 }

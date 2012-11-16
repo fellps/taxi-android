@@ -32,6 +32,7 @@
     <string name="url_update_user_location">updateuserloc/</string>
     <string name="url_get_taxis">gettaxis/</string>
     <string name="url_request_taxi">requesttaxi/</string>
+    <string name="url_status_request">statusrequest/</string>
     <string name="url_records">getrecords/</string>
     <string name="url_help">http://www.google.com.br</string>
     
@@ -45,6 +46,20 @@
 	
 	<string name="login_name">earthlost</string>
     <string name="login_pass">fvs24862*</string>
+    
+    <!-- Configuration -->
+    
+    <string name="config_alter">Alterar meus dados</string>
+    <string name="config_vehicle">Veículo *</string>
+    <string name="config_rg">RG *</string>
+    <string name="config_cpf">CPF *</string>
+    <string name="config_plaque">Placa do veículo *</string>
+    <string name="config_license">Número da licença *</string>
+    <string name="config_cnh">CNH *</string>
+    <string name="config_lang">Idiomas fluentes *</string>
+    <string name="config_lang_pt">Português</string>
+    <string name="config_lang_en">Inglês</string>
+    <string name="config_lang_es">Espanhol</string>
     
     <!-- ClientMap -->
 	
@@ -89,6 +104,11 @@
 	<string name="map_search_point">Buscando táxis próximos a você, aguarde..</string>
 	<string name="map_pd_update_map">Atualizando a sua localização..</string>
 	
+	<!-- RecoverPass -->
+	
+	<string name="rp_title">Informe o seu e-mail</string>
+	<string name="rp_button">Me envie uma nova senha</string>
+	
 	<!-- TabHost -->
 	
 	<string name="menu_map">Mapa</string>
@@ -100,6 +120,7 @@
 	
 	<!-- Taximeter -->
 	
+	<string name="taximeter_city">Selecione a sua cidade</string>
 	<string name="map_taximeter_info">Escolha a sua origem e clique em prosseguir.</string>
 	<string name="map_taximeter_info_next">Escolha o seu destino e clique em finalizar.</string>
 	<string name="map_taximeter_next">Prosseguir</string>
@@ -117,13 +138,15 @@
 	
 	<!-- Register -->
 	
-	<string name="register_name">Nome</string>
+	<string name="register_name">Nome *</string>
 	<string name="register_name_description">John Lennon</string>
-	<string name="register_email">E-mail</string>
+	<string name="register_email">E-mail *</string>
 	<string name="register_email_description">john@gmail.com</string>
-	<string name="register_phone">Telefone</string>
+	<string name="register_phone">Telefone *</string>
 	<string name="register_phone_description">1199999999</string>
-	<string name="register_pw">Senha</string>
+	<string name="register_pw">Senha *</string>
+	<string name="register_button_client">Registrar como um Cliente</string>
+	<string name="register_button_taxi">Registrar como um Taxista</string>
 	<string name="register_button">Registrar</string>
 	<string name="register_lang">Idioma</string>
 	<string name="spinner_lang">Escolher idioma</string>
@@ -144,6 +167,29 @@
     <string name="register_error_param">Não foi possível realizar o seu cadastro!</string>
     <string name="register_error_duplicate">O e-mail informado já foi registrado!</string>
     
+    <!-- Request -->
+    
+    <string name="req_info">Preencha os filtros de solicitação abaixo:</string>
+    <string name="req_payment">Forma de pagamento *</string>
+    <string name="req_animals">Transporte de animais *</string>
+    <string name="req_passengers">Quantidade de passageiros</string>
+    <string name="req_needs">Portador de necessidades especiais *</string>
+    <string name="req_volume">Volume da bagagem em KG</string>
+	<string name="spinner_payment">Forma de pagamento</string>
+    <string-array name="spinner_array_pay">
+        <item>Dinheiro</item>
+        <item>Cartão de Crédito ou Débito</item>
+    </string-array>
+	<string name="spinner_passengers">Quantidade de passageiros</string>
+    <string-array name="spinner_array_pas">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
+    <string name="req_kg">KG</string>
+    <string name="req_bt_send">Enviar solicitação</string>
+    
     <!-- Presentation -->
     
     <string name="present_"></string>
@@ -154,5 +200,10 @@
     <string name="pd_content_register">Aguarde, estamos realizando o seu cadastro&#8230;</string>
     <string name="pd_content_login">Aguarde, estamos realizando o seu login&#8230;</string>
     <string name="pd_content_loading">Aguarde, estamos processando a sua requisição..</string>
+    
+    <!-- Other -->
+    
+    <string name="toggle_turn_on">Sim</string>
+    <string name="toggle_turn_off">Não</string>
   
 </resources>

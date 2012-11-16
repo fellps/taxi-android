@@ -32,5 +32,5 @@
         android:focusableInTouchMode="true"
         android:state_enabled="true" >
     </com.google.android.maps.MapView>
-	
+
 </RelativeLayout>

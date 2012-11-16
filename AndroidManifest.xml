@@ -3,9 +3,7 @@
     package="tcc.iesgo.activity"
     android:versionCode="0"
     android:versionName="0.14a" >
-
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="15" />
-
+    
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,6 +11,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE"/>
 	<uses-permission android:name="android.permission.STATUS_BAR_SERVICE" android:protectionLevel="signature" />
+
+    <uses-sdk android:minSdkVersion="7" android:maxSdkVersion="15" android:targetSdkVersion="7"/>
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -40,7 +40,13 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         
         <activity
-            android:name="tcc.iesgo.activity.RegisterActivity"
+            android:name=".RegisterClientActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="user"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        
+        <activity
+            android:name=".RegisterTaxiActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
@@ -71,6 +77,12 @@
         
         <activity
             android:name="tcc.iesgo.activity.ClientMapActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="user"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        
+        <activity
+            android:name="tcc.iesgo.activity.RequestFilterActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="user"
             android:theme="@android:style/Theme.NoTitleBar" />
